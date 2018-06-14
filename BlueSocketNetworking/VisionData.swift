@@ -55,8 +55,7 @@ struct VisionData: Codable {
 }
 
 extension Float {
-    public static func random(in range: ClosedRange<Float>) -> Float {
-        
+    public static func random(in range: ClosedRange<Float>) -> Float {        
          return Float(arc4random()) / Float(range.upperBound)
     }
 }
