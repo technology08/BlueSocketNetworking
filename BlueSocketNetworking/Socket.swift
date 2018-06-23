@@ -37,13 +37,13 @@ class EchoServer {
     
     func runClient() {
         
-        let queue = DispatchQueue.global(qos: .userInteractive)
+        //let queue = DispatchQueue.global(qos: .userInteractive)
         
-        queue.async { [unowned self] in
+        //queue.async { [unowned self] in
             
             do {
-                // Create an IPV6 socket...
-                try self.listenSocket = Socket.create(family: .inet6)
+                // Create an IPV4 socket...
+                try self.listenSocket = Socket.create(family: .inet)
                 
                 guard let socket = self.listenSocket else {
                     
@@ -78,8 +78,8 @@ class EchoServer {
                     
                 }
             }
-        }
-        dispatchMain()
+        //}
+        //dispatchMain()
     }
     
     func addNewConnection(socket: Socket) {
@@ -90,10 +90,10 @@ class EchoServer {
         }
         
         // Get the global concurrent queue...
-        let queue = DispatchQueue.global(qos: .default)
+        //let queue = DispatchQueue.global(qos: .default)
         
         // Create the run loop work item and dispatch to the default priority global queue...
-        queue.async { [unowned self, socket] in
+        //queue.async { [unowned self, socket] in
             
             var shouldKeepRunning = true
             
@@ -174,7 +174,7 @@ class EchoServer {
                     print("Error reported by connection at \(socket.remoteHostname):\(socket.remotePort):\n \(socketError.description)")
                 }
             }
-        }
+        //}
     }
     
     func shutdownServer() {

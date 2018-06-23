@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		004CDF2820D56D5100B27546 /* Vision.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004CDF2720D56D5100B27546 /* Vision.swift */; };
 		007B816F20D18A890081D107 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007B816E20D18A890081D107 /* AppDelegate.swift */; };
 		007B817120D18A890081D107 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007B817020D18A890081D107 /* ViewController.swift */; };
 		007B817420D18A890081D107 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 007B817220D18A890081D107 /* Main.storyboard */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		004CDF2720D56D5100B27546 /* Vision.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vision.swift; sourceTree = "<group>"; };
 		007B816B20D18A890081D107 /* BlueSocketNetworking.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BlueSocketNetworking.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		007B816E20D18A890081D107 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		007B817020D18A890081D107 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -76,6 +78,7 @@
 				007B817020D18A890081D107 /* ViewController.swift */,
 				00AC5C0820D3161300B337BD /* Camera.swift */,
 				007B818020D18EF00081D107 /* Socket.swift */,
+				004CDF2720D56D5100B27546 /* Vision.swift */,
 				007B818220D1AF210081D107 /* VisionData.swift */,
 				007B817220D18A890081D107 /* Main.storyboard */,
 				007B817520D18A8A0081D107 /* Assets.xcassets */,
@@ -223,6 +226,7 @@
 				007B817120D18A890081D107 /* ViewController.swift in Sources */,
 				00AC5C0920D3161300B337BD /* Camera.swift in Sources */,
 				007B818320D1AF210081D107 /* VisionData.swift in Sources */,
+				004CDF2820D56D5100B27546 /* Vision.swift in Sources */,
 				007B816F20D18A890081D107 /* AppDelegate.swift in Sources */,
 				007B818120D18EF00081D107 /* Socket.swift in Sources */,
 			);

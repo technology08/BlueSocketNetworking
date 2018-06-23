@@ -22,29 +22,41 @@ class ViewController: UIViewController {
     @IBOutlet weak var previewView: UIView!
     
     var captureSession: AVCaptureSession?
-    var previewLayer: AVCaptureVideoPreviewLayer?
+    var cameraStream: AVCaptureVideoPreviewLayer?
+    var output = AVCaptureVideoDataOutput()
+    
+    var server: EchoServer?
+    
+    var sequenceRequestHandler = VNSequenceRequestHandler()
+    var lastObservation: VNRectangleObservation?
+    
+    var horizontalFoV: Float?
+    var pixelBufferSize = CGSize(width: 0, height: 0)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        let type = Type.Client//Change
-        if type == .Server {
-            let port: Int32 = 1337
-            let server = VisionServer(port: port)
-            server.runClient()
-        } else if type == .Client {
+        /*
             let port: Int = 1337
-            let server = EchoServer(port: port)
-            server.runClient()
-        }
-       
-        print("Connect with a command line window by entering 'nc ::1 1337'")
-        
+            self.server = EchoServer(port: port)
+            self.server?.runClient()
+            
+            print("Connect with a command line window by entering 'nc ::1 1337'")
+        */
+
         do {
-            try setupCamera()
+            try self.setupCamera()
         } catch {
             print(error)
         }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+       
+        
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -52,23 +64,19 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
         
     }
-    /*
-    func detectRect() {
-        let request = VNDetectRectanglesRequest { (request, error) in
-            //Process data from request
-            guard error == nil else {
-                print(error)
-                return
-            }
+
+    @IBAction func serverSwitchChanged(_ sender: Any) {
+    
+        if self.serverSwitch.isOn {
+            let port: Int = 1337
+            self.server = EchoServer(port: port)
+            self.server?.runClient()
             
+            print("Connect with a command line window by entering 'nc ::1 1337'")
+        } else if !self.serverSwitch.isOn {
+            self.server?.shutdownServer()
         }
-        
-        let handler = VNImageRequestHandler(cvPixelBuffer: <#T##CVPixelBuffer#>, options: <#T##[VNImageOption : Any]#>)
-    }*/
 
-
-}
-
-enum Type {
-    case Server, Client
+    }
+    
 }
