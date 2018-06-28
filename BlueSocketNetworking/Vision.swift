@@ -18,13 +18,13 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         }
         
         self.pixelBufferSize = CGSize(width: CVPixelBufferGetWidth(buffer), height: CVPixelBufferGetHeight(buffer))
-        
+        //print("Size is \(self.pixelBufferSize). FOV is \(self.horizontalFoV)")
         if lastObservation == nil {
             //First frame, detect and find rectangle
             do {
                 try detectRect(pixelBuffer: buffer)
             } catch {
-                print(error)
+                print("This is where it failed: \(error)")
             }
         } else {
             //Continue tracking
@@ -34,7 +34,7 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
                 let observation = request.results?.first as! VNRectangleObservation
                 self.lastObservation = observation
             } catch {
-                print(error)
+                print("Tracking failed: \(error)")
             }
         }
         
@@ -42,34 +42,51 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
     
     
     func detectRect(pixelBuffer: CVPixelBuffer) throws {
-        let request = VNDetectRectanglesRequest { (request, error) in
-            //Process data from request
-            guard error == nil else {
-                print(error!)
-                return
-            }
-        }
+        let request = VNDetectRectanglesRequest(completionHandler: self.detectHandler)
         
         let handler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer, options: [:])
         
         try handler.perform([request])
-        
+    }
+    
+    func detectHandler(request: VNRequest, error: Error?) {
         guard let results = request.results as? [VNRectangleObservation] else {
             return
         }
         
-        for result in results {
-            
-            let height = result.topLeft.y - result.bottomLeft.y
-            let width = result.topRight.x - result.topLeft.x
-            let aspectRatio = height / width
-            //1:5
-            if aspectRatio >= 1.8 && aspectRatio <= 2.2 {
-                self.lastObservation = result
-                break
+        /*for result in results {
+            if result.confidence > 0.5 {
+                DispatchQueue.main.async {
+                    self.newDraw(box: result)
+                }
             }
+            
+           
+        }*/
+        
+        
+        for result in results {
+            if result.confidence > 0.5 {
+                let height = result.bottomLeft.y - result.topLeft.y
+                let width = result.topRight.x - result.topLeft.x
+                let aspectRatio = height / width
+                print("Detected rect with aspect ratio \(aspectRatio)")
+                
+                //Delete
+                
+                self.lastObservation = result
+                
+                //1:5
+                if aspectRatio >= 0.1 && aspectRatio <= 0.3 {
+                    self.lastObservation = result
+                    print("Rect found")
+                    break
+                }
+            } else {
+                print("Confidence is too low.")
+            }
+            
         }
-    
     }
     
     func captureOutput(_ output: AVCaptureOutput, didDrop sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {

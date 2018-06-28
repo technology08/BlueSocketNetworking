@@ -21,6 +21,8 @@ struct VisionData: Codable {
     var bottomLeftX:  Float = 0.0
     var bottomLeftY:  Float = 0.0
     
+    var error: String? = nil
+    
     init() {
         
     }
@@ -40,22 +42,29 @@ struct VisionData: Codable {
     
     mutating func randomize() {
         
-        self.bottomLeftX  =    Float.random(in: 0...100)
-        self.bottomRightX =    Float.random(in: 0...100)
-        self.bottomRightY =    Float.random(in: 0...100)
-        self.bottomLeftY  =    Float.random(in: 0...100)
-        self.topLeftX     =    Float.random(in: 0...100)
-        self.topRightX    =    Float.random(in: 0...100)
-        self.topRightY    =    Float.random(in: 0...100)
-        self.topLeftY     =    Float.random(in: 0...100)
-
-        print(self.topLeftX)
+        do {
+            self.bottomLeftX  =    Float.random(in: 0...100)
+            self.bottomRightX =    Float.random(in: 0...100)
+            self.bottomRightY =    Float.random(in: 0...100)
+            self.bottomLeftY  =    Float.random(in: 0...100)
+            self.topLeftX     =    Float.random(in: 0...100)
+            self.topRightX    =    Float.random(in: 0...100)
+            self.topRightY    =    Float.random(in: 0...100)
+            self.topLeftY     =    Float.random(in: 0...100)
+            
+            print(self.topLeftX)
+        } catch {
+            self.error = error.localizedDescription
+            fatalError()
+        }
+        
         
     }
 }
-
+/*
 extension Float {
     public static func random(in range: ClosedRange<Float>) -> Float {        
          return Float(arc4random()) / Float(range.upperBound)
     }
 }
+*/

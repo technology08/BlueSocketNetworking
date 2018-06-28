@@ -37,9 +37,9 @@ class EchoServer {
     
     func runClient() {
         
-        //let queue = DispatchQueue.global(qos: .userInteractive)
+        let queue = DispatchQueue.global(qos: .userInteractive)
         
-        //queue.async { [unowned self] in
+        queue.async { [unowned self] in
             
             do {
                 // Create an IPV4 socket...
@@ -78,8 +78,8 @@ class EchoServer {
                     
                 }
             }
-        //}
-        //dispatchMain()
+        }
+        dispatchMain()
     }
     
     func addNewConnection(socket: Socket) {
@@ -90,10 +90,10 @@ class EchoServer {
         }
         
         // Get the global concurrent queue...
-        //let queue = DispatchQueue.global(qos: .default)
+        let queue = DispatchQueue.global(qos: .default)
         
         // Create the run loop work item and dispatch to the default priority global queue...
-        //queue.async { [unowned self, socket] in
+        queue.async { [unowned self, socket] in
             
             var shouldKeepRunning = true
             
@@ -107,13 +107,13 @@ class EchoServer {
                     let bytesRead = try socket.read(into: &readData)
                     
                     if bytesRead > 0 {
-                        guard let response = String(data: readData, encoding: .utf8) else {
+                        guard let request = String(data: readData, encoding: .utf8) else {
                             
                             print("Error decoding response...")
                             readData.count = 0
                             break
                         }
-                        if response.hasPrefix(EchoServer.shutdownCommand) {
+                        if request.hasPrefix(EchoServer.shutdownCommand) {
                             
                             print("Shutdown requested by connection at \(socket.remoteHostname):\(socket.remotePort)")
                             
@@ -122,28 +122,23 @@ class EchoServer {
                             
                             return
                         }
-                        print("Server received from connection at \(socket.remoteHostname):\(socket.remotePort): \(response) ")
+                        print("Server received from connection at \(socket.remoteHostname):\(socket.remotePort): \(request) ")
                         
-                        if response.hasPrefix("VISION") {
-                            self.visionData.randomize()
+                        if request == "VISION" {
+                            //self.visionData.randomize()
                             let json = try JSONEncoder().encode(self.visionData)
-                            let reply = "Server response: \n\(json)\n"
-                            try socket.write(from: reply)
-                        } else if response.hasPrefix("VISIONSTRING") {
-                            self.visionData.randomize()
-                            let json = try JSONEncoder().encode(self.visionData)
-                            let string = try JSONSerialization.jsonObject(with: json, options: [])
+                            guard let string = String(data: json, encoding: String.Encoding.utf8) else {
+                                
+                                print("String couldn't be created")
+                                return
+                                
+                            }
                             let reply = "Server response: \n\(string)\n"
                             try socket.write(from: reply)
-                        } else if response.hasPrefix(EchoServer.quitCommand) || response.hasSuffix(EchoServer.quitCommand) {
+                        } else if request.hasPrefix(EchoServer.quitCommand) || request.hasSuffix(EchoServer.quitCommand) {
                             
                             shouldKeepRunning = false
                         }
-//                        self.visionData.randomize()
-//                        let json = try JSONEncoder().encode(self.visionData)
-//                        let reply = "Server response: \n\(json)\n"
-//                        try socket.write(from: reply)
-                        
                         
                     }
                     
@@ -174,7 +169,7 @@ class EchoServer {
                     print("Error reported by connection at \(socket.remoteHostname):\(socket.remotePort):\n \(socketError.description)")
                 }
             }
-        //}
+        }
     }
     
     func shutdownServer() {
