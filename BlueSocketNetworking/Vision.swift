@@ -8,6 +8,7 @@
 
 import AVFoundation
 import Vision
+import UIKit
 
 extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
     
@@ -17,12 +18,21 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
             return
         }
         
+        let image = CIImage(cvPixelBuffer: buffer)
+        guard let filtered = image.colorFilter() else { return }
+        
+        //Debug Only: Delete
+        DispatchQueue.main.async {
+            self.previewImageView.image = UIImage(ciImage: filtered)
+        }
+       
+        
         self.pixelBufferSize = CGSize(width: CVPixelBufferGetWidth(buffer), height: CVPixelBufferGetHeight(buffer))
         //print("Size is \(self.pixelBufferSize). FOV is \(self.horizontalFoV)")
         if lastObservation == nil {
             //First frame, detect and find rectangle
             do {
-                try detectRect(pixelBuffer: buffer)
+                try detectRect(ciImage: filtered)
             } catch {
                 print("This is where it failed: \(error)")
             }
@@ -30,7 +40,7 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
             //Continue tracking
             let request = VNTrackRectangleRequest(rectangleObservation: lastObservation!)
             do {
-                try sequenceRequestHandler.perform([request], on: buffer)
+                try sequenceRequestHandler.perform([request], on: filtered)
                 let observation = request.results?.first as! VNRectangleObservation
                 self.lastObservation = observation
             } catch {
@@ -41,10 +51,11 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
     }
     
     
-    func detectRect(pixelBuffer: CVPixelBuffer) throws {
+    func detectRect(ciImage: CIImage) throws {
         let request = VNDetectRectanglesRequest(completionHandler: self.detectHandler)
         
-        let handler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer, options: [:])
+        //let handler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer, options: [:])
+        let handler = VNImageRequestHandler(ciImage: ciImage, options: [:])
         
         try handler.perform([request])
     }

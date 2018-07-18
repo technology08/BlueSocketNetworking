@@ -21,6 +21,8 @@ struct VisionData: Codable {
     var bottomLeftX:  Float = 0.0
     var bottomLeftY:  Float = 0.0
     
+    var timestamp: Float = 0
+    
     var error: String? = nil
     
     init() {

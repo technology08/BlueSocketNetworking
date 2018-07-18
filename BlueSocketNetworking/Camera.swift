@@ -35,7 +35,7 @@ extension ViewController {
         
         captureSession?.startRunning()
         
-        setupPreview()
+        //setupPreview()
     }
     
     func setupPreview() {

@@ -20,9 +20,18 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hsg-v8-v7X">
                                 <rect key="frame" x="0.0" y="36" width="320" height="440"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="xjh-g5-nfF">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="440"/>
+                                    </imageView>
+                                </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
+                                    <constraint firstItem="xjh-g5-nfF" firstAttribute="top" secondItem="hsg-v8-v7X" secondAttribute="top" id="MQh-iX-wcV"/>
+                                    <constraint firstItem="xjh-g5-nfF" firstAttribute="leading" secondItem="hsg-v8-v7X" secondAttribute="leading" id="Nf7-5y-fsO"/>
                                     <constraint firstAttribute="width" constant="320" id="OA1-oR-dsw"/>
+                                    <constraint firstAttribute="bottom" secondItem="xjh-g5-nfF" secondAttribute="bottom" id="egP-BG-RIc"/>
+                                    <constraint firstAttribute="trailing" secondItem="xjh-g5-nfF" secondAttribute="trailing" id="wLC-xC-OZe"/>
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Vision Processing:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mbe-ZY-YBZ">
@@ -65,6 +74,7 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="previewImageView" destination="xjh-g5-nfF" id="qup-9J-5sc"/>
                         <outlet property="previewView" destination="hsg-v8-v7X" id="jFH-8N-uYA"/>
                         <outlet property="serverLabel" destination="Uui-NZ-1Ks" id="BGi-W0-eXH"/>
                         <outlet property="serverSwitch" destination="tMd-yk-Qro" id="NsE-ZX-RLT"/>

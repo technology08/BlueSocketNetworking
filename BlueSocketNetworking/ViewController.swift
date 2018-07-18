@@ -20,6 +20,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var visionLabel: NSLayoutConstraint!
     
     @IBOutlet weak var previewView: UIView!
+    @IBOutlet weak var previewImageView: UIImageView!
     
     var captureSession: AVCaptureSession?
     var cameraStream: AVCaptureVideoPreviewLayer?
@@ -47,10 +48,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        
-        
- 
-
+    
         do {
             try self.setupCamera()
         } catch {
@@ -61,12 +59,7 @@ class ViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        let port: Int = 1337
-        self.server = EchoServer(port: port)
-        self.server?.runClient()
-        
-        print("Connect with a command line window by entering 'nc ::1 1337'")
-        
+        //runServer()
         
     }
 
@@ -75,15 +68,19 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
         
     }
+    
+    func runServer() {
+        let port: Int = 1337
+        self.server = EchoServer(port: port)
+        self.server?.runClient()
+        
+        print("Connect with a command line window by entering 'nc ::1 1337'")
+    }
 
     @IBAction func serverSwitchChanged(_ sender: Any) {
     
         if self.serverSwitch.isOn {
-            let port: Int = 1337
-            self.server = EchoServer(port: port)
-            self.server?.runClient()
-            
-            print("Connect with a command line window by entering 'nc ::1 1337'")
+            runServer()
         } else if !self.serverSwitch.isOn {
             self.server?.shutdownServer()
         }
