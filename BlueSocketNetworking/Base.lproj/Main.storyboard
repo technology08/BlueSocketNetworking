@@ -21,7 +21,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hsg-v8-v7X">
                                 <rect key="frame" x="0.0" y="36" width="320" height="440"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="xjh-g5-nfF">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="xjh-g5-nfF">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="440"/>
                                     </imageView>
                                 </subviews>
@@ -78,7 +78,7 @@
                         <outlet property="previewView" destination="hsg-v8-v7X" id="jFH-8N-uYA"/>
                         <outlet property="serverLabel" destination="Uui-NZ-1Ks" id="BGi-W0-eXH"/>
                         <outlet property="serverSwitch" destination="tMd-yk-Qro" id="NsE-ZX-RLT"/>
-                        <outlet property="visionLabel" destination="Opr-Ev-vDU" id="xyE-KA-2A5"/>
+                        <outlet property="visionLabel" destination="Mbe-ZY-YBZ" id="SqT-xk-bBi"/>
                         <outlet property="visionSwitch" destination="tGu-r1-LFe" id="tAj-ua-hSh"/>
                     </connections>
                 </viewController>

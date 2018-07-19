@@ -14,21 +14,11 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
     
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         
-        guard let buffer = CMSampleBufferGetImageBuffer(sampleBuffer)! as? CVPixelBuffer else {
-            return
-        }
-        
-        let image = CIImage(cvPixelBuffer: buffer)
-        guard let filtered = image.colorFilter() else { return }
-        
-        //Debug Only: Delete
+        let filtered = getFilteredImage(sampleBuffer: sampleBuffer, filtered: true)
         DispatchQueue.main.async {
             self.previewImageView.image = UIImage(ciImage: filtered)
         }
        
-        
-        self.pixelBufferSize = CGSize(width: CVPixelBufferGetWidth(buffer), height: CVPixelBufferGetHeight(buffer))
-        //print("Size is \(self.pixelBufferSize). FOV is \(self.horizontalFoV)")
         if lastObservation == nil {
             //First frame, detect and find rectangle
             do {
@@ -50,7 +40,30 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         
     }
     
+    /**
+     Converts CMSampleBuffer produced from delegate to CIImage. Also sets the size of the pixel buffer to self.pixelBufferSize for use in calculations.
+     - Parameter sampleBuffer: The sample buffer produced from the captureOutput function to be processed.
+     - Parameter filtered: If set to true, the image will be filtered by the colorFilter() func.
+     - Returns: CIImage from sample buffer, potentially filtered.
+    */
+    func getFilteredImage(sampleBuffer: CMSampleBuffer, filtered: Bool) -> CIImage {
+        let buffer = CMSampleBufferGetImageBuffer(sampleBuffer)! as CVPixelBuffer
+        
+        self.pixelBufferSize = CGSize(width: CVPixelBufferGetWidth(buffer), height: CVPixelBufferGetHeight(buffer))
+        
+        let image = CIImage(cvPixelBuffer: buffer)
+        if filtered {
+            let filteredImage = image.colorFilter()!
+            return filteredImage
+        } else {
+            return image
+        }
+    }
     
+    /**
+     Conducts the initial detection of the rectangle for subsequent tracking to be based on.
+     - Parameter ciImage: The color-filtered Core Image object to have tracking performed on.
+     */
     func detectRect(ciImage: CIImage) throws {
         let request = VNDetectRectanglesRequest(completionHandler: self.detectHandler)
         
@@ -60,6 +73,9 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         try handler.perform([request])
     }
     
+    /**
+     The completion handler following the initial detection.
+     */
     func detectHandler(request: VNRequest, error: Error?) {
         guard let results = request.results as? [VNRectangleObservation] else {
             return
