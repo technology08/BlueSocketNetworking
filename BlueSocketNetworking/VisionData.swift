@@ -8,6 +8,7 @@
 
 import CoreGraphics
 
+/*
 struct VisionData: Codable {
     var topLeftX:     Float = 0.0
     var topLeftY:     Float = 0.0
@@ -62,11 +63,37 @@ struct VisionData: Codable {
         
         
     }
-}
+}*/
 /*
-extension Float {
-    public static func random(in range: ClosedRange<Float>) -> Float {        
-         return Float(arc4random()) / Float(range.upperBound)
+ extension Float {
+ public static func random(in range: ClosedRange<Float>) -> Float {
+ return Float(arc4random()) / Float(range.upperBound)
+ }
+ }
+ */
+
+struct RectangleData: Codable {
+    ///The difference between the center of the FoV and the rectangle's center
+    var degrees: CGFloat?
+    ///The timestamp given in ISO 8061 format: "YYYY-MM-DD HH:MM:SS +0000\n"
+    var timestamp: String?
+    ///The approximate distance given in inches.
+    var distance: CGFloat?
+    ///Whether a rectangle has been detected.
+    var detected = false
+    
+    ///A blank initializer which turns `detected` to false.
+    init() {
+        detected = false
+    }
+    
+    ///An initializer for resetting the RectangleData.
+    init(degreesOfDifference: CGFloat, date: String, height: CGFloat) {
+        self.degrees   = degreesOfDifference
+        self.timestamp = date
+        self.distance  = height
+        self.detected  = true
     }
 }
-*/
+
+//height^3 + height^2 + height + connstant

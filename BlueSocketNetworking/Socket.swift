@@ -16,7 +16,7 @@ class EchoServer {
     static let shutdownCommand: String = "SHUTDOWN"
     static let bufferSize = 4096
     
-    var visionData = VisionData()
+    var visionData = RectangleData()
     let port: Int
     var listenSocket: Socket? = nil
     var continueRunning = true

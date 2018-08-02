@@ -21,6 +21,12 @@ extension CIImage {
         //let maxColor = UIColor(hue: 140, saturation: 70, brightness: 60, alpha: 1).ciColor
         //46, 153, 83
         //122, 165, 86 -> 0.48, 0.65, 0.34
+        
+        //HSV: 5,0,0 to 80,255,255
+        //Ratios h2w 0.2-0.53
+        //Ratios w2h 5-1.88
+        //Area ratio 1.75-2.1
+        
         let kernelString =
         """
         kernel vec4 thresholdFilter(__sample textureColor) {

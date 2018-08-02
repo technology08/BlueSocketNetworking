@@ -25,30 +25,27 @@ class ViewController: UIViewController {
     //AVCapture variables
     
     var captureSession: AVCaptureSession?
-    var cameraStream: AVCaptureVideoPreviewLayer?
+    //var cameraStream: AVCaptureVideoPreviewLayer?
     var output = AVCaptureVideoDataOutput()
     
     ///The server used for communicating with the robot.
     var server: EchoServer?
     
     var sequenceRequestHandler = VNSequenceRequestHandler()
-    var lastObservation: VNRectangleObservation? = nil {
-        didSet {
-            //Parse it
-            
-            let vision = VisionData(
-                topLeft:     lastObservation?.topLeft ?? CGPoint.zero,
-                topRight:    lastObservation?.topRight ?? CGPoint.zero,
-                bottomLeft:  lastObservation?.bottomLeft ?? CGPoint.zero,
-                bottomRight: lastObservation?.bottomRight ?? CGPoint.zero)
-            server?.visionData = vision
-        }
-    }
+    ///The last observation to be passed into the tracking request.
+    var lastObservation: VNRectangleObservation? = nil
     
     ///The camera's horizontal field of view in degrees.
     var horizontalFoV: Float?
     ///The size in pixels of the pixel buffer.
     var pixelBufferSize = CGSize(width: 0, height: 0)
+    
+    ///The current data ready to be fetched by the server.
+    var currentData = RectangleData() {
+        didSet {
+            server?.visionData = currentData
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

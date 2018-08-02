@@ -32,6 +32,7 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
             do {
                 try sequenceRequestHandler.perform([request], on: filtered)
                 let observation = request.results?.first as! VNRectangleObservation
+                processData(observation: observation)
                 self.lastObservation = observation
             } catch {
                 print("Tracking failed: \(error)")
@@ -66,6 +67,13 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
      */
     func detectRect(ciImage: CIImage) throws {
         let request = VNDetectRectanglesRequest(completionHandler: self.detectHandler)
+        request.maximumObservations = 0
+        
+        //1.46
+        request.minimumAspectRatio = VNAspectRatio(1.88)
+        request.maximumAspectRatio = VNAspectRatio(5)
+        
+        request.minimumConfidence = 0.4
         
         //let handler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer, options: [:])
         let handler = VNImageRequestHandler(ciImage: ciImage, options: [:])
@@ -81,36 +89,30 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
             return
         }
         
-        /*for result in results {
-            if result.confidence > 0.5 {
-                DispatchQueue.main.async {
-                    self.newDraw(box: result)
-                }
-            }
-            
-           
-        }*/
-        
-        
         for result in results {
             if result.confidence > 0.5 {
-                let height = result.bottomLeft.y - result.topLeft.y
-                let width = result.topRight.x - result.topLeft.x
+                let height = result.topLeft.y.convertToPixels(pixelBufferSize: pixelBufferSize, axis: .y) - result.bottomLeft.y.convertToPixels(pixelBufferSize: pixelBufferSize, axis: .y)
+                let width = result.topRight.x.convertToPixels(pixelBufferSize: pixelBufferSize, axis: .x) - result.topLeft.x.convertToPixels(pixelBufferSize: pixelBufferSize, axis: .x)
                 let aspectRatio = height / width
                 print("Detected rect with aspect ratio \(aspectRatio)")
                 
-                //Delete
-                
-                self.lastObservation = result
+                //9.5 width x 6.5 height
                 
                 //1:5
-                if aspectRatio >= 0.1 && aspectRatio <= 0.3 {
+                //0.684
+                if aspectRatio >= 0.5 && aspectRatio <= 0.8 {
                     self.lastObservation = result
-                    print("Rect found")
+                    print("Result points are " + result.topLeft.debugDescription + result.topRight.debugDescription + result.bottomLeft.debugDescription + result.bottomRight.debugDescription)
+                    print("Rect found with aspect ratio of \(aspectRatio)")
+                    print("Field of View is \(horizontalFoV!) and buffer size is \(pixelBufferSize.height)x\(pixelBufferSize.width)")
+                    
+                    processData(observation: result)
+                    
                     break
                 }
             } else {
                 print("Confidence is too low.")
+                
             }
             
         }
@@ -120,8 +122,39 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         //Handle dropped frame
     }
     
-    func processData() {
+    /**
+     Processes data and finds the angle the detected rectangle is off by.
+     
+     - Parameter observation: The observation containing the rectangle of which you want to process.
+ */
+    func processData(observation: VNRectangleObservation) {
         guard let observation = self.lastObservation else { return }
+        let centerRectX = (observation.topLeft.x + observation.topRight.x) / 2
         
+        let difference = centerRectX - 0.5
+        let angle = difference * CGFloat(horizontalFoV!)
+        print(angle)
+        
+        let dateString = Formatter.iso8601.string(from: Date())
+        
+        let height = (observation.topLeft.y + observation.bottomLeft.y) / 2
+        
+        self.currentData = RectangleData(degreesOfDifference: angle, date: dateString, height: heightFormula(height: height))
     }
 }
+
+extension Formatter {
+    static let iso8601: ISO8601DateFormatter = {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        return formatter
+    }()
+}
+
+func heightFormula(height: CGFloat) -> CGFloat {
+    let cubed = pow(height, 3)
+    let doubled = pow(height, 2)
+    
+    return (5 * cubed) + (2 * doubled) + (7 * height) + 10
+}
+
