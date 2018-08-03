@@ -16,12 +16,12 @@ class EchoServer {
     static let shutdownCommand: String = "SHUTDOWN"
     static let bufferSize = 4096
     
-    var visionData = RectangleData()
+    private var visionData = RectangleData()
     let port: Int
-    var listenSocket: Socket? = nil
-    var continueRunning = true
-    var connectedSockets = [Int32: Socket]()
-    let socketLockQueue = DispatchQueue(label: "com.CE.BlueSocketNetworking.socketLockQueue")
+    private var listenSocket: Socket? = nil
+    private var continueRunning = true
+    private var connectedSockets = [Int32: Socket]()
+    private let socketLockQueue = DispatchQueue(label: "com.CE.BlueSocketNetworking.socketLockQueue")
     
     init(port: Int) {
         self.port = port
@@ -33,6 +33,20 @@ class EchoServer {
             socket.close()
         }
         self.listenSocket?.close()
+    }
+    
+    public func getVisionData() -> RectangleData? {
+        var returnthing: RectangleData? = nil
+        lock(obj: visionData as AnyObject) {
+            returnthing = visionData
+        }
+        return returnthing
+    }
+    
+    public func setVisionData(data: RectangleData) {
+        lock(obj: visionData as AnyObject) {
+            self.visionData = data
+        }
     }
     
     func runClient() {
@@ -79,7 +93,7 @@ class EchoServer {
                 }
             }
         }
-        dispatchMain()
+        //dispatchMain()
     }
     
     func addNewConnection(socket: Socket) {
@@ -126,7 +140,7 @@ class EchoServer {
                         
                         if request == "VISION" {
                             //self.visionData.randomize()
-                            let json = try JSONEncoder().encode(self.visionData)
+                            let json = try JSONEncoder().encode(self.getVisionData()!)
                             guard let string = String(data: json, encoding: String.Encoding.utf8) else {
                                 
                                 print("String couldn't be created")

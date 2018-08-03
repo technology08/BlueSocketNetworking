@@ -73,12 +73,13 @@ struct VisionData: Codable {
  */
 
 struct RectangleData: Codable {
+    
     ///The difference between the center of the FoV and the rectangle's center
-    var degrees: CGFloat?
+    var degrees: Float = 0.0
     ///The timestamp given in ISO 8061 format: "YYYY-MM-DD HH:MM:SS +0000\n"
-    var timestamp: String?
+    var timestamp: String = ""
     ///The approximate distance given in inches.
-    var distance: CGFloat?
+    var distance: Float = 0.0
     ///Whether a rectangle has been detected.
     var detected = false
     
@@ -89,9 +90,9 @@ struct RectangleData: Codable {
     
     ///An initializer for resetting the RectangleData.
     init(degreesOfDifference: CGFloat, date: String, height: CGFloat) {
-        self.degrees   = degreesOfDifference
+        self.degrees   = Float(degreesOfDifference)
         self.timestamp = date
-        self.distance  = height
+        self.distance  = Float(height)
         self.detected  = true
     }
 }

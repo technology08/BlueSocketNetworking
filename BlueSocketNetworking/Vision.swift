@@ -97,9 +97,6 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
                 print("Detected rect with aspect ratio \(aspectRatio)")
                 
                 //9.5 width x 6.5 height
-                
-                //1:5
-                //0.684
                 if aspectRatio >= 0.5 && aspectRatio <= 0.8 {
                     self.lastObservation = result
                     print("Result points are " + result.topLeft.debugDescription + result.topRight.debugDescription + result.bottomLeft.debugDescription + result.bottomRight.debugDescription)
@@ -139,7 +136,12 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         
         let height = (observation.topLeft.y + observation.bottomLeft.y) / 2
         
-        self.currentData = RectangleData(degreesOfDifference: angle, date: dateString, height: heightFormula(height: height))
+        server?.setVisionData(data: RectangleData(degreesOfDifference: angle, date: dateString, height: heightFormula(height: height)))
+        /*
+        lock(obj: self.currentData as AnyObject) {
+            self.currentData = RectangleData(degreesOfDifference: angle, date: dateString, height: heightFormula(height: height))
+        }*/
+        
     }
 }
 
@@ -158,3 +160,13 @@ func heightFormula(height: CGFloat) -> CGFloat {
     return (5 * cubed) + (2 * doubled) + (7 * height) + 10
 }
 
+/**
+ A Swift multithreaded locking function.
+ - Parameter obj: The object you wish to lock, or pause read/write actions.
+ - Parameter blk: The function in which you update the obj.
+ */
+func lock(obj: AnyObject, blk:() -> ()) {
+    objc_sync_enter(obj)
+    blk()
+    objc_sync_exit(obj)
+}

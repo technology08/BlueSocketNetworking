@@ -41,11 +41,7 @@ class ViewController: UIViewController {
     var pixelBufferSize = CGSize(width: 0, height: 0)
     
     ///The current data ready to be fetched by the server.
-    var currentData = RectangleData() {
-        didSet {
-            server?.visionData = currentData
-        }
-    }
+    //var currentData = RectangleData() 
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,7 +57,10 @@ class ViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        //runServer()
+        //let qos = DispatchQueue(label: "server")
+        //qos.async {
+            self.runServer()
+        //}
         
     }
 
