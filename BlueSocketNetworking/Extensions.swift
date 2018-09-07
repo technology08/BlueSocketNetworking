@@ -30,3 +30,7 @@ extension CGFloat {
         }
     }
 }
+
+public enum Target: Int {
+    case Paper = 0, Steamworks = 1
+}

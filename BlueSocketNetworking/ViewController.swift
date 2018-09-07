@@ -12,16 +12,12 @@ import Vision
 import AVFoundation
 
 class ViewController: UIViewController {
-
-    @IBOutlet weak var serverSwitch: UISwitch!
-    @IBOutlet weak var serverLabel: UILabel!
-    
-    @IBOutlet weak var visionSwitch: UISwitch!  
-    @IBOutlet weak var visionLabel: UILabel!
     
     @IBOutlet weak var previewView: UIView!
     @IBOutlet weak var previewImageView: UIImageView!
     
+    @IBOutlet weak var debugLabel: UILabel!
+    @IBOutlet weak var targetControl: UISegmentedControl!
     //AVCapture variables
     
     var captureSession: AVCaptureSession?
@@ -60,6 +56,7 @@ class ViewController: UIViewController {
         //let qos = DispatchQueue(label: "server")
         //qos.async {
             self.runServer()
+        //print(OpenCVWrapper.openCVVersionString())
         //}
         
     }
@@ -80,14 +77,7 @@ class ViewController: UIViewController {
         self.server?.runClient()
     }
 
-    @IBAction func serverSwitchChanged(_ sender: Any) {
-    
-        if self.serverSwitch.isOn {
-            runServer()
-        } else if !self.serverSwitch.isOn {
-            self.server?.shutdownServer()
-        }
-
+    @IBAction func targetControlChanged(_ sender: Any) {
     }
     
 }

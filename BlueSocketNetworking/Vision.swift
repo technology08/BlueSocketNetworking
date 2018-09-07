@@ -15,6 +15,7 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         
         let filtered = getFilteredImage(sampleBuffer: sampleBuffer, filtered: true)
+        //let filled = filtered.floodFill()
         DispatchQueue.main.async {
             self.previewImageView.image = UIImage(ciImage: filtered)
         }
@@ -54,7 +55,7 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         
         let image = CIImage(cvPixelBuffer: buffer)
         if filtered {
-            let filteredImage = image.colorFilter()!
+            let filteredImage = image.colorFilter(target: self.targetControl.selectedSegmentIndex)!
             return filteredImage
         } else {
             return image
@@ -97,6 +98,7 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
                 print("Detected rect with aspect ratio \(aspectRatio)")
                 
                 //9.5 width x 6.5 height
+                //if aspectRatio >= 0.5 && aspectRatio <= 0.8
                 if aspectRatio >= 0.5 && aspectRatio <= 0.8 {
                     self.lastObservation = result
                     print("Result points are " + result.topLeft.debugDescription + result.topRight.debugDescription + result.bottomLeft.debugDescription + result.bottomRight.debugDescription)
@@ -135,6 +137,10 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         let dateString = Formatter.iso8601.string(from: Date())
         
         let height = (observation.topLeft.y + observation.bottomLeft.y) / 2
+        
+        DispatchQueue.main.async {
+            self.debugLabel.text = "\(((angle * 100).rounded()) / 100) degrees | \(dateString)"
+        }
         
         server?.setVisionData(data: RectangleData(degreesOfDifference: angle, date: dateString, height: heightFormula(height: height)))
         /*

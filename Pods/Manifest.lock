@@ -1,16 +1,20 @@
 PODS:
   - BlueSocket (1.0.8)
+  - OpenCV (3.4.2)
 
 DEPENDENCIES:
   - BlueSocket
+  - OpenCV
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  https://github.com/cocoapods/specs.git:
     - BlueSocket
+    - OpenCV
 
 SPEC CHECKSUMS:
   BlueSocket: 763db95b6002c0e7dec8eb0c27bc628ca95296d1
+  OpenCV: 452909747854c92e0f59670961ed5131f5286cb5
 
-PODFILE CHECKSUM: 0b845eda03086fe9b978bc5d43c53cc83599300f
+PODFILE CHECKSUM: f81836b993b739d2e0d24219df10e59fe06c5796
 
-COCOAPODS: 1.5.0
+COCOAPODS: 1.5.3

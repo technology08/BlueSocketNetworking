@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   type = "0"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BlueSocketNetworking/Socket.swift"
+            timestampString = "555090071.0613101"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "175"
+            endingLineNumber = "175"
+            landmarkName = "addNewConnection(socket:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #2 () -&gt; () in BlueSocketNetworking.EchoServer.addNewConnection(socket: Socket.Socket) -&gt; ()"
+                  moduleName = "BlueSocketNetworking"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/connorespenshade/Documents/Developer/Robotics/FRC/BlueSocketNetworking/BlueSocketNetworking/Socket.swift"
+                  timestampString = "555092321.036665"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "176"
+                  endingLineNumber = "176"
+                  offsetFromSymbolStart = "364">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #2 () -&gt; () in BlueSocketNetworking.EchoServer.addNewConnection(socket: Socket.Socket) -&gt; ()"
+                  moduleName = "BlueSocketNetworking"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/connorespenshade/Documents/Developer/Robotics/FRC/BlueSocketNetworking/BlueSocketNetworking/Socket.swift"
+                  timestampString = "555092321.039677"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "176"
+                  endingLineNumber = "176"
+                  offsetFromSymbolStart = "2388">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
