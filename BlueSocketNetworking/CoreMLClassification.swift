@@ -137,4 +137,16 @@ public extension UIImage {
     }
 }
 
-
+func detectCapturedImage( image : UIImage) -> [CGPoint]? {
+   
+    let resizeImage = image.resized(width: 500, height: 500)
+    if let resizeImageInPixelBuffer = resizeImage.pixelBuffer(width: 500, height: 500) {
+        if let edgeDetectedImage = EdgeDetectionUtil.classify(image: resizeImageInPixelBuffer, row: 500, column: 500) {
+            
+            return EdgeDetectionUtil.getShapes(edgeDetectedImage: edgeDetectedImage)
+        }
+    }
+    
+    return nil
+    
+}

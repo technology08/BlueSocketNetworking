@@ -9,17 +9,19 @@
 import AVFoundation
 import Vision
 import UIKit
+import CoreGraphics
 
 extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
     
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         
         let filtered = getFilteredImage(sampleBuffer: sampleBuffer, filtered: true)
+        let uiimage = UIImage(ciImage: filtered)
         //let filled = filtered.floodFill()
         DispatchQueue.main.async {
-            self.previewImageView.image = UIImage(ciImage: filtered)
+            self.previewImageView.image = uiimage
         }
-       
+       /*
         if lastObservation == nil {
             //First frame, detect and find rectangle
             do {
@@ -39,7 +41,11 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
                 print("Tracking failed: \(error)")
             }
         }
+        */
+        //, row: Int(self.pixelBufferSize.width), column: Int(self.pixelBufferSize.height)
         
+        
+        print(detectCapturedImage(image: uiimage))
     }
     
     /**
@@ -119,6 +125,7 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
     
     func captureOutput(_ output: AVCaptureOutput, didDrop sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         //Handle dropped frame
+        print("Frame dropped")
     }
     
     /**

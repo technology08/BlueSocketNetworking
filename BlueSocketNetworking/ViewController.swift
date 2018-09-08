@@ -23,6 +23,7 @@ class ViewController: UIViewController {
     var captureSession: AVCaptureSession?
     //var cameraStream: AVCaptureVideoPreviewLayer?
     var output = AVCaptureVideoDataOutput()
+    let context = CIContext()
     
     ///The server used for communicating with the robot.
     var server: EchoServer?
