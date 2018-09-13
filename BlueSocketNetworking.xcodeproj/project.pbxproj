@@ -10,7 +10,6 @@
 		0043F2B52113C47A006D754A /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0043F2B42113C47A006D754A /* Extensions.swift */; };
 		004CDF2820D56D5100B27546 /* Vision.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004CDF2720D56D5100B27546 /* Vision.swift */; };
 		00627A8220E5A6490003BB58 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00627A8120E5A6490003BB58 /* Filter.swift */; };
-		006B16A321160C5200040270 /* OpenCV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 006B16A221160C5200040270 /* OpenCV.swift */; };
 		00712CD42141EB3700A06498 /* edge_detection.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 00712CD32141EB3700A06498 /* edge_detection.mlmodel */; };
 		00712CD62141EB8900A06498 /* CoreMLClassification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00712CD52141EB8900A06498 /* CoreMLClassification.swift */; };
 		00712CD82141ED1D00A06498 /* ShapeParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00712CD72141ED1D00A06498 /* ShapeParsing.swift */; };
@@ -33,7 +32,6 @@
 		0043F2B42113C47A006D754A /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		004CDF2720D56D5100B27546 /* Vision.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vision.swift; sourceTree = "<group>"; };
 		00627A8120E5A6490003BB58 /* Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
-		006B16A221160C5200040270 /* OpenCV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenCV.swift; sourceTree = "<group>"; };
 		00712CD32141EB3700A06498 /* edge_detection.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = edge_detection.mlmodel; sourceTree = "<group>"; };
 		00712CD52141EB8900A06498 /* CoreMLClassification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreMLClassification.swift; sourceTree = "<group>"; };
 		00712CD72141ED1D00A06498 /* ShapeParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeParsing.swift; sourceTree = "<group>"; };
@@ -101,7 +99,6 @@
 				007B818020D18EF00081D107 /* Socket.swift */,
 				00AC5C0820D3161300B337BD /* Camera.swift */,
 				004CDF2720D56D5100B27546 /* Vision.swift */,
-				006B16A221160C5200040270 /* OpenCV.swift */,
 				00627A8120E5A6490003BB58 /* Filter.swift */,
 				007B818220D1AF210081D107 /* VisionData.swift */,
 				0043F2B42113C47A006D754A /* Extensions.swift */,
@@ -264,7 +261,6 @@
 				00AC5C0920D3161300B337BD /* Camera.swift in Sources */,
 				007B818320D1AF210081D107 /* VisionData.swift in Sources */,
 				004CDF2820D56D5100B27546 /* Vision.swift in Sources */,
-				006B16A321160C5200040270 /* OpenCV.swift in Sources */,
 				00BC72012131A5290007DB9E /* OpenCVWrapper.mm in Sources */,
 				007B816F20D18A890081D107 /* AppDelegate.swift in Sources */,
 				00712CD42141EB3700A06498 /* edge_detection.mlmodel in Sources */,

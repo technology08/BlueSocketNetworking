@@ -22,6 +22,28 @@
     // UIImageWriteToSavedPhotosAlbum(rotatedImage, self, nil, nil);
 }
 
+-(std::vector<std::vector<CGPoint>>) findContourPoints :(UIImage *)image {
+    cv::Mat cvmat = [OpenCVWrapper CVMatFromImage:image];
+    std::vector<std::vector<cv::Point>> contours;
+    cv::findContours(cvmat, contours, cv::RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
+    
+    std::vector<std::vector<CGPoint>> masterReturn;
+    
+    for (std::vector<cv::Point> vector : contours ) {
+        std::vector<CGPoint> rowVector;
+        
+        for (cv::Point point : vector) {
+            CGPoint cgpoint = CGPointMake(point.x, point.y);
+            rowVector.push_back(cgpoint);
+        }
+        
+        masterReturn.push_back(rowVector);
+    }
+    
+    return masterReturn;
+    
+}
+
 -(cv::Mat) shapeDetection :(UIImage *)image { // image is the result of Edge detection, it's in gray scale.
     
     /*
@@ -33,7 +55,7 @@
      cv::Canny(gray, bw, 0, 50, 5);
      imageView.image = [UIImage fromCVMat:gray];
      */
-    
+
     cv::Mat cameraFeed =  [OpenCVWrapper CVMatFromImage:image];
     std::vector< std::vector<cv::Point> > contours;
     std::vector<cv::Vec4i> hierarchy;

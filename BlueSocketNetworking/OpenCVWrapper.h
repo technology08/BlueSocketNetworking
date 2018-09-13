@@ -18,5 +18,8 @@
 @property (nonatomic,strong) NSMutableArray * shapesResults; // [[shapes:coordinates]]
 
 -(void) shapeIdentify :(UIImage *)image;
+#ifdef __cplusplus
+-(std::vector<std::vector<CGPoint>>) findContourPoints :(UIImage *)image;
+#endif
 
 @end
