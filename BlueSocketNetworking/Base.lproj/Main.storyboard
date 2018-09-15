@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.3.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -18,22 +17,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hsg-v8-v7X">
-                                <rect key="frame" x="0.0" y="36" width="320" height="443"/>
-                                <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="xjh-g5-nfF">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="443"/>
-                                    </imageView>
-                                </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstItem="xjh-g5-nfF" firstAttribute="top" secondItem="hsg-v8-v7X" secondAttribute="top" id="MQh-iX-wcV"/>
-                                    <constraint firstItem="xjh-g5-nfF" firstAttribute="leading" secondItem="hsg-v8-v7X" secondAttribute="leading" id="Nf7-5y-fsO"/>
-                                    <constraint firstAttribute="width" constant="320" id="OA1-oR-dsw"/>
-                                    <constraint firstAttribute="bottom" secondItem="xjh-g5-nfF" secondAttribute="bottom" id="egP-BG-RIc"/>
-                                    <constraint firstAttribute="trailing" secondItem="xjh-g5-nfF" secondAttribute="trailing" id="wLC-xC-OZe"/>
-                                </constraints>
-                            </view>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="DHJ-BF-kdg">
                                 <rect key="frame" x="16" y="487" width="288" height="29"/>
                                 <segments>
@@ -50,25 +33,28 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5OZ-HL-Wsx">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="479"/>
+                            </arscnView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="DHJ-BF-kdg" firstAttribute="top" secondItem="5OZ-HL-Wsx" secondAttribute="bottom" constant="8" id="3bB-Um-oe0"/>
                             <constraint firstItem="ynj-Dp-1AY" firstAttribute="top" secondItem="DHJ-BF-kdg" secondAttribute="bottom" constant="16" id="66m-q4-k1A"/>
-                            <constraint firstItem="hsg-v8-v7X" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="16" id="Lxx-9n-wzx"/>
+                            <constraint firstItem="5OZ-HL-Wsx" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="P7d-ZR-nvc"/>
+                            <constraint firstItem="5OZ-HL-Wsx" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="Uuh-un-i8G"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="ynj-Dp-1AY" secondAttribute="trailing" constant="16" id="V0S-si-3p6"/>
                             <constraint firstItem="ynj-Dp-1AY" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="cvx-Sf-r8y"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="ynj-Dp-1AY" secondAttribute="bottom" constant="16" id="d8j-SN-ho2"/>
-                            <constraint firstItem="hsg-v8-v7X" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="dg7-O1-dRL"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="DHJ-BF-kdg" secondAttribute="trailing" constant="16" id="iNF-e6-w0d"/>
                             <constraint firstItem="DHJ-BF-kdg" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="iwJ-eK-jqv"/>
-                            <constraint firstItem="DHJ-BF-kdg" firstAttribute="top" secondItem="hsg-v8-v7X" secondAttribute="bottom" constant="8" id="nco-hn-M4L"/>
+                            <constraint firstItem="5OZ-HL-Wsx" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="z80-II-id2"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
                         <outlet property="debugLabel" destination="ynj-Dp-1AY" id="LlC-eO-utz"/>
-                        <outlet property="previewImageView" destination="xjh-g5-nfF" id="qup-9J-5sc"/>
-                        <outlet property="previewView" destination="hsg-v8-v7X" id="jFH-8N-uYA"/>
+                        <outlet property="sceneView" destination="5OZ-HL-Wsx" id="mWs-Gh-hgN"/>
                         <outlet property="targetControl" destination="DHJ-BF-kdg" id="ALY-eh-DJR"/>
                     </connections>
                 </viewController>

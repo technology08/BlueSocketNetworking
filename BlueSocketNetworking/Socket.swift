@@ -202,3 +202,14 @@ class EchoServer {
         }
     }
 }
+
+/**
+ A Swift multithreaded locking function.
+ - Parameter obj: The object you wish to lock, or pause read/write actions.
+ - Parameter blk: The function in which you update the obj.
+ */
+func lock(obj: AnyObject, blk:() -> ()) {
+    objc_sync_enter(obj)
+    blk()
+    objc_sync_exit(obj)
+}

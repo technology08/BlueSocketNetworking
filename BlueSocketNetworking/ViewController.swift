@@ -10,20 +10,20 @@ import UIKit
 import Socket
 import Vision
 import AVFoundation
+import ARKit
 
 class ViewController: UIViewController {
     
-    @IBOutlet weak var previewView: UIView!
-    @IBOutlet weak var previewImageView: UIImageView!
-    
+    @IBOutlet weak var sceneView: ARSCNView!
     @IBOutlet weak var debugLabel: UILabel!
     @IBOutlet weak var targetControl: UISegmentedControl!
-    //AVCapture variables
     
-    var captureSession: AVCaptureSession?
-    //var cameraStream: AVCaptureVideoPreviewLayer?
-    var output = AVCaptureVideoDataOutput()
     let context = CIContext()
+    
+    var session = ARSession()
+    
+    ///Anchor of the vision target to be tracked frame by frame.
+    var targetAnchor: ARImageAnchor?
     
     ///The server used for communicating with the robot.
     var server: EchoServer?
@@ -43,12 +43,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-    
-        do {
-            try self.setupCamera()
-        } catch {
-            print(error)
-        }
+        
+        setupARSession()
     }
     
     override func viewDidAppear(_ animated: Bool) {
