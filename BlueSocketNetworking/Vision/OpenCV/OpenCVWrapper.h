@@ -17,7 +17,7 @@
 @interface OpenCVWrapper : NSObject
 
 -(NSMutableArray*) findContourPoints :(UIImage *)image;
--(CVPixelBufferRef) getContourImage :(CVPixelBufferRef)image;
+-(CVPixelBufferRef) getContourImage :(UIImage *)image;
 -(OCVRect*) boundingRect :(CVPixelBufferRef)image;
 
 @end

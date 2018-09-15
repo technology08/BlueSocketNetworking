@@ -97,4 +97,3 @@ struct RectangleData: Codable {
     }
 }
 
-//height^3 + height^2 + height + connstant

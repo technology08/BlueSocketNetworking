@@ -17,12 +17,14 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         
         let filtered = getFilteredImage(sampleBuffer: sampleBuffer, filtered: true)
         let uiimage = UIImage(ciImage: filtered)
+        let contourImage = OpenCVWrapper().getContourImage(uiimage) as! CVPixelBuffer
+        
         //let filled = filtered.floodFill()
         DispatchQueue.main.async {
-            self.previewImageView.image = uiimage
+            self.previewImageView.image = UIImage(ciImage: CIImage(cvPixelBuffer: contourImage))
         }
         
-        let contourPoints = OpenCVWrapper().findContourPoints(uiimage) 
+        
        /*
         if lastObservation == nil {
             //First frame, detect and find rectangle
