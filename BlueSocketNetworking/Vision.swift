@@ -14,7 +14,16 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
     
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         
-        let filtered = getFilteredImage(sampleBuffer: sampleBuffer, filtered: true)
+        let (filtered, size) = sampleBuffer.getFilteredImage(
+            redMin:   defaults.float(forKey: "redMin"  ),
+            redMax:   defaults.float(forKey: "redMax"  ),
+            greenMin: defaults.float(forKey: "greenMin"),
+            greenMax: defaults.float(forKey: "greenMax"),
+            blueMin:  defaults.float(forKey: "blueMin" ),
+            blueMax:  defaults.float(forKey: "blueMax" ),
+            filtered: true)
+        self.pixelBufferSize = size
+        //let filtered = CIImage(cvImageBuffer: CMSampleBufferGetImageBuffer(sampleBuffer)!)
         DispatchQueue.main.async {
             self.previewImageView.image = UIImage(ciImage: filtered)
         }
@@ -36,30 +45,12 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
                 self.lastObservation = observation
             } catch {
                 print("Tracking failed: \(error)")
+                debugLabel.text = "Tracking failed: \(error)"
             }
         }
         
     }
     
-    /**
-     Converts CMSampleBuffer produced from delegate to CIImage. Also sets the size of the pixel buffer to self.pixelBufferSize for use in calculations.
-     - Parameter sampleBuffer: The sample buffer produced from the captureOutput function to be processed.
-     - Parameter filtered: If set to true, the image will be filtered by the colorFilter() func.
-     - Returns: CIImage from sample buffer, potentially filtered.
-    */
-    func getFilteredImage(sampleBuffer: CMSampleBuffer, filtered: Bool) -> CIImage {
-        let buffer = CMSampleBufferGetImageBuffer(sampleBuffer)! as CVPixelBuffer
-        
-        self.pixelBufferSize = CGSize(width: CVPixelBufferGetWidth(buffer), height: CVPixelBufferGetHeight(buffer))
-        
-        let image = CIImage(cvPixelBuffer: buffer)
-        if filtered {
-            let filteredImage = image.colorFilter()!
-            return filteredImage
-        } else {
-            return image
-        }
-    }
     
     /**
      Conducts the initial detection of the rectangle for subsequent tracking to be based on.
@@ -70,9 +61,10 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         request.maximumObservations = 0
         
         //1.46
+        
         request.minimumAspectRatio = VNAspectRatio(1.88)
         request.maximumAspectRatio = VNAspectRatio(5)
-        
+ 
         request.minimumConfidence = 0.4
         
         //let handler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer, options: [:])
@@ -91,10 +83,10 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         
         for result in results {
             if result.confidence > 0.5 {
-                let height = result.topLeft.y.convertToPixels(pixelBufferSize: pixelBufferSize, axis: .y) - result.bottomLeft.y.convertToPixels(pixelBufferSize: pixelBufferSize, axis: .y)
-                let width = result.topRight.x.convertToPixels(pixelBufferSize: pixelBufferSize, axis: .x) - result.topLeft.x.convertToPixels(pixelBufferSize: pixelBufferSize, axis: .x)
+                let height = result.topLeft.y - result.bottomLeft.y
+                let width = result.topRight.x - result.topLeft.x
                 let aspectRatio = height / width
-                print("Detected rect with aspect ratio \(aspectRatio)")
+                print("Detected rect with aspect ratio \(aspectRatio); x: \(result.topLeft.x); y: \(result.topLeft.y); height: \(height); width: \(width)")
                 
                 //9.5 width x 6.5 height
                 if aspectRatio >= 0.5 && aspectRatio <= 0.8 {
@@ -131,6 +123,10 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         let difference = centerRectX - 0.5
         let angle = difference * CGFloat(horizontalFoV!)
         print(angle)
+        
+        DispatchQueue.main.async {
+            self.debugLabel.text = ("topLeft of (\(observation.topLeft.x.rounded()), \(observation.topLeft.y.rounded()). Angle off \(angle) degrees.")
+        }
         
         let dateString = Formatter.iso8601.string(from: Date())
         

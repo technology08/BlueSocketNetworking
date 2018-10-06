@@ -12,13 +12,8 @@ import Vision
 import AVFoundation
 
 class ViewController: UIViewController {
-
-    @IBOutlet weak var serverSwitch: UISwitch!
-    @IBOutlet weak var serverLabel: UILabel!
     
-    @IBOutlet weak var visionSwitch: UISwitch!  
-    @IBOutlet weak var visionLabel: UILabel!
-    
+    @IBOutlet weak var debugLabel: UILabel!
     @IBOutlet weak var previewView: UIView!
     @IBOutlet weak var previewImageView: UIImageView!
     
@@ -41,12 +36,21 @@ class ViewController: UIViewController {
     var pixelBufferSize = CGSize(width: 0, height: 0)
     
     ///The current data ready to be fetched by the server.
-    //var currentData = RectangleData() 
+    //var currentData = RectangleData()
+    
+    ///Defaults stores values in filter settings
+    let defaults = UserDefaults.standard
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
     
+        self.runServer()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
         do {
             try self.setupCamera()
         } catch {
@@ -54,12 +58,19 @@ class ViewController: UIViewController {
         }
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        captureSession?.stopRunning()
+        captureSession = nil
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         //let qos = DispatchQueue(label: "server")
         //qos.async {
-            self.runServer()
+        
         //}
         
     }
@@ -80,14 +91,4 @@ class ViewController: UIViewController {
         self.server?.runClient()
     }
 
-    @IBAction func serverSwitchChanged(_ sender: Any) {
-    
-        if self.serverSwitch.isOn {
-            runServer()
-        } else if !self.serverSwitch.isOn {
-            self.server?.shutdownServer()
-        }
-
-    }
-    
 }

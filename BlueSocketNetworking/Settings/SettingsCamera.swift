@@ -1,15 +1,15 @@
 //
-//  Camera.swift
+//  SettingsCamera.swift
 //  BlueSocketNetworking
 //
-//  Created by Connor Espenshade on 6/14/18.
+//  Created by Connor Espenshade on 10/6/18.
 //  Copyright © 2018 Connor Espenshade. All rights reserved.
 //
 
 import AVFoundation
 import UIKit
 
-extension ViewController {
+extension SettingsViewController {
     /**
      Must be called to enable the camera. Sets up input, output. Orients the video and calculates the horizontal field-of-view angle (stored in self.horizontalFoV).
      */
@@ -29,7 +29,7 @@ extension ViewController {
                 //}
                 //let bias = captureDevice.minExposureTargetBias + 2
                 
-                let bias = defaults.float(forKey: "exposure")
+                let bias = exposureSlider.value
                 
                 captureDevice.setExposureTargetBias(bias) { (time) in
                     print("Configured exposure")
@@ -40,8 +40,6 @@ extension ViewController {
             }
         }
         
-        //Calculates FoV for determining angle
-        self.horizontalFoV = captureDevice.activeFormat.videoFieldOfView
         
         //Adds rear camera video as input
         let input = try AVCaptureDeviceInput(device: captureDevice)
@@ -64,23 +62,26 @@ extension ViewController {
         connection?.videoOrientation = .portrait
         
         captureSession?.startRunning()
-        
+        self.device = captureDevice
         //setupPreview()
-    }
-    /**
-     This configures an AVPreviewLayer for the ViewController's captureSession and adds it to a new layer of the previewView.
-     */
-    func setupPreview() {
-        let stream = AVCaptureVideoPreviewLayer(session: self.captureSession!)
-        stream.frame = previewView.layer.bounds
-        stream.videoGravity = .resizeAspectFill
-        stream.masksToBounds = true
-        self.previewView.layer.addSublayer(stream)
     }
 }
 
-enum CameraError: Error {
-    case captureDeviceNotFound(String)
-    case captureSessionFailedtoAddInput(String)
-    case captureSessionFailedtoAddOutput(String)
+extension SettingsViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
+    
+    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        
+        DispatchQueue.main.async {
+            let (filtered, _) = sampleBuffer.getFilteredImage(
+                redMin:   self.redMinSlider  .value,
+                redMax:   self.redMaxSlider  .value,
+                greenMin: self.greenMinSlider.value,
+                greenMax: self.greenMaxSlider.value,
+                blueMin:  self.blueMinSlider .value,
+                blueMax:  self.blueMaxSlider .value,
+                filtered: true)
+            
+            self.imageView.image = UIImage(ciImage: filtered)
+        }
+    }
 }

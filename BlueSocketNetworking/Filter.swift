@@ -8,33 +8,29 @@
 
 import CoreImage
 import UIKit
+import AVFoundation
 
 extension CIImage {
+    
     /**
      Applies a green color filter. All pixels are either white or black depending on if they fit in the color range.
- */
-    public func colorFilter() -> CIImage? {
-        // Actual: UIColor(hue: 126, saturation: 63, brightness: 53, alpha: 1)
+     */
+    public func colorFilter(
+        redMin  : Float,
+        redMax  : Float,
+        greenMin: Float,
+        greenMax: Float,
+        blueMin : Float,
+        blueMax : Float
+        ) -> CIImage? {
         
-        //let minColor = UIColor(hue: 110, saturation: 50, brightness: 40, alpha: 0).ciColor
-        //60, 102, 51
-        //let maxColor = UIColor(hue: 140, saturation: 70, brightness: 60, alpha: 1).ciColor
-        //46, 153, 83
-        //122, 165, 86 -> 0.48, 0.65, 0.34
-        
-        //HSV: 5,0,0 to 80,255,255
-        //Ratios h2w 0.2-0.53
-        //Ratios w2h 5-1.88
-        //Area ratio 1.75-2.1
-        
+        //  textureColor.r > 0.00 && textureColor.r < 0.35 && textureColor.g > 0.25 && textureColor.g < 0.60 && textureColor.b > 0.00 && textureColor.b < 0.25
         let kernelString =
         """
-        kernel vec4 thresholdFilter(__sample textureColor) {
+        kernel vec4 thresholdFilter(__sample textureColor, float redMin, float redMax, float greenMin, float greenMax, float blueMin, float blueMax) {
 
-            if (textureColor.r > 0.20 && textureColor.r < 0.57 && textureColor.g > 0.28 && textureColor.g < 0.71 && textureColor.b > 0.15 && textureColor.b < 0.41 &&
-                textureColor.g > textureColor.r &&
-                textureColor.g > textureColor.b) {
-                textureColor.rgb = vec3(1.0, 1.0, 1.0);
+            if (textureColor.r > redMin && textureColor.r < redMax && textureColor.g > greenMin && textureColor.g < greenMax && textureColor.b > blueMin && textureColor.b < blueMax) {
+
             } else {
                 textureColor.rgb = vec3(0.0, 0.0, 0.0);
             }
@@ -44,9 +40,30 @@ extension CIImage {
         """
         
         guard let kernel = CIColorKernel(source: kernelString) else { return nil }
-        let filtered = kernel.apply(extent: self.extent, arguments: [self])
+        let filtered = kernel.apply(extent: self.extent, arguments: [self, redMin, redMax, greenMin, greenMax, blueMin, blueMax])
         return filtered
         
     }
 }
 
+extension CMSampleBuffer {
+    /**
+     Converts CMSampleBuffer produced from delegate to CIImage. Also sets the size of the pixel buffer to self.pixelBufferSize for use in calculations.
+     - Parameter sampleBuffer: The sample buffer produced from the captureOutput function to be processed.
+     - Parameter filtered: If set to true, the image will be filtered by the `colorFilter()` func.
+     - Returns: `CIImage` from sample buffer, potentially filtered and `CGSize` of pixel buffer.
+     */
+    func getFilteredImage(redMin: Float, redMax: Float, greenMin: Float, greenMax: Float, blueMin: Float, blueMax: Float, filtered: Bool) -> (CIImage, CGSize) {
+        let buffer = CMSampleBufferGetImageBuffer(self)! as CVPixelBuffer
+        
+        let pixelBufferSize = CGSize(width: CVPixelBufferGetWidth(buffer), height: CVPixelBufferGetHeight(buffer))
+        
+        let image = CIImage(cvPixelBuffer: buffer)
+        if filtered {
+            let filteredImage = image.colorFilter(redMin: redMin, redMax: redMax, greenMin: greenMin, greenMax: greenMax, blueMin: blueMin, blueMax: blueMax)!
+            return (filteredImage, pixelBufferSize)
+        } else {
+            return (image, pixelBufferSize)
+        }
+    }
+}

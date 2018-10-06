@@ -10,30 +10,20 @@ import Vision
 import CoreGraphics
 import UIKit
 
-extension ViewController {
-    
-    
-    func drawBox(box: VNRectangleObservation) {
-        let xCoord = box.topLeft.x * previewView.frame.size.width
-        let yCoord = (1 - box.topLeft.y) * previewView.frame.size.height
-        let width = (box.topRight.x - box.bottomLeft.x) * previewView.frame.size.width
-        let height = (box.topLeft.y - box.bottomLeft.y) * previewView.frame.size.height
+extension UIImage {
+    class func circle(point: CGPoint) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: 5, height: 5), false, 0)
+        let ctx = UIGraphicsGetCurrentContext()!
+        ctx.saveGState()
         
-        let layer = CALayer()
-        layer.frame = CGRect(x: xCoord, y: yCoord, width: width, height: height)
-        layer.borderWidth = 1.0
-        layer.borderColor = UIColor.blue.cgColor
+        let rect = CGRect(x: point.x, y: point.y, width: 5, height: 5)
+        ctx.setFillColor(UIColor.blue.cgColor)
+        ctx.fillEllipse(in: rect)
         
-        previewView.layer.addSublayer(layer)
+        ctx.restoreGState()
+        let img = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        
+        return img
     }
-
-    func newDraw(box: VNRectangleObservation) {
-        let layer = CALayer()
-        layer.frame = CGRect(x: box.topLeft.x, y: box.topLeft.y, width: (box.topRight.x - box.topLeft.x), height: (box.topLeft.y - box.bottomLeft.y))
-        layer.borderWidth = 1.0
-        layer.borderColor = UIColor.blue.cgColor
-        
-        previewView.layer.addSublayer(layer)
-    }
-    
 }
