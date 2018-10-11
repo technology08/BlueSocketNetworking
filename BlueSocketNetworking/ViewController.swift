@@ -15,7 +15,9 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var debugLabel: UILabel!
     @IBOutlet weak var previewView: UIView!
-    @IBOutlet weak var previewImageView: UIImageView!
+    @IBOutlet weak var previewImageView: UIImageView!    
+    @IBOutlet weak var confidenceSlider: UISlider!
+    @IBOutlet weak var confidenceLabel: UILabel!
     
     //AVCapture variables
     
@@ -35,17 +37,27 @@ class ViewController: UIViewController {
     ///The size in pixels of the pixel buffer.
     var pixelBufferSize = CGSize(width: 0, height: 0)
     
+    ///Confidence level
+    var confidence: Float = 0.4
+    
     ///The current data ready to be fetched by the server.
     //var currentData = RectangleData()
     
     ///Defaults stores values in filter settings
     let defaults = UserDefaults.standard
     
+    var trackingDropped = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
     
         self.runServer()
+        
+        // Configure confidence slider
+        confidence = defaults.float(forKey: "confidence")
+        confidenceSlider.setValue(confidence, animated: false)
+        confidenceLabel.text = String(confidence)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -91,4 +103,14 @@ class ViewController: UIViewController {
         self.server?.runClient()
     }
 
+    @IBAction func confidenceChanged(_ sender: Any) {
+        confidence = confidenceSlider.value
+        confidenceLabel.text = String((confidence * 100).rounded()/100)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        defaults.set(confidence, forKey: "confidence")
+    }
 }

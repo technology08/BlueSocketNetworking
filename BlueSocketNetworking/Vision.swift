@@ -14,6 +14,8 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
     
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         
+        // Configures the filter based on user defaults.
+        // Also, only filtered if camera not updated in past 5 frames.
         let (filtered, size) = sampleBuffer.getFilteredImage(
             redMin:   defaults.float(forKey: "redMin"  ),
             redMax:   defaults.float(forKey: "redMax"  ),
@@ -21,9 +23,9 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
             greenMax: defaults.float(forKey: "greenMax"),
             blueMin:  defaults.float(forKey: "blueMin" ),
             blueMax:  defaults.float(forKey: "blueMax" ),
-            filtered: true)
+            filtered: ((lastObservation == nil) ? true : false))
         self.pixelBufferSize = size
-        //let filtered = CIImage(cvImageBuffer: CMSampleBufferGetImageBuffer(sampleBuffer)!)
+        
         DispatchQueue.main.async {
             self.previewImageView.image = UIImage(ciImage: filtered)
         }
@@ -46,6 +48,12 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
             } catch {
                 print("Tracking failed: \(error)")
                 debugLabel.text = "Tracking failed: \(error)"
+                if trackingDropped == 5 {
+                    //Restart detection
+                    lastObservation = nil
+                } else {
+                    trackingDropped += 1
+                }
             }
         }
         
@@ -60,14 +68,11 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         let request = VNDetectRectanglesRequest(completionHandler: self.detectHandler)
         request.maximumObservations = 0
         
-        //1.46
-        
         request.minimumAspectRatio = VNAspectRatio(1.88)
         request.maximumAspectRatio = VNAspectRatio(5)
  
-        request.minimumConfidence = 0.4
+        request.minimumConfidence = confidence
         
-        //let handler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer, options: [:])
         let handler = VNImageRequestHandler(ciImage: ciImage, options: [:])
         
         try handler.perform([request])
@@ -81,15 +86,19 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
             return
         }
         
+        // Run through sequence of results
         for result in results {
-            if result.confidence > 0.5 {
+            /// Probably unnecessary second chance to guarantee `VNRectangleObservation` is greater than user-defined `confidence`
+            if result.confidence > confidence {
                 let height = result.topLeft.y - result.bottomLeft.y
                 let width = result.topRight.x - result.topLeft.x
+                
                 let aspectRatio = height / width
+                
                 print("Detected rect with aspect ratio \(aspectRatio); x: \(result.topLeft.x); y: \(result.topLeft.y); height: \(height); width: \(width)")
                 
-                //9.5 width x 6.5 height
-                if aspectRatio >= 0.5 && aspectRatio <= 0.8 {
+                // Aspect ratio is HEIGHT / WIDTH
+                if aspectRatio >= 0.35 && aspectRatio <= 0.50 {
                     self.lastObservation = result
                     print("Result points are " + result.topLeft.debugDescription + result.topRight.debugDescription + result.bottomLeft.debugDescription + result.bottomRight.debugDescription)
                     print("Rect found with aspect ratio of \(aspectRatio)")
@@ -103,7 +112,6 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
                 print("Confidence is too low.")
                 
             }
-            
         }
     }
     
@@ -112,7 +120,12 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
     }
     
     /**
-     Processes data and finds the angle the detected rectangle is off by.
+     Processes data and updates `RectangleData` object in `VisionServer`.
+     - Finds the difference of the rectangle to the center of the frame.
+     - Calculates angle of error from multiplying `difference` by `horizontalFoV` of camera.
+     - Updates debug label.
+     - Adds time stamp.
+     - Configures `RectangleData` object to add to the server.
      
      - Parameter observation: The observation containing the rectangle of which you want to process.
  */
@@ -125,7 +138,7 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         print(angle)
         
         DispatchQueue.main.async {
-            self.debugLabel.text = ("topLeft of (\(observation.topLeft.x.rounded()), \(observation.topLeft.y.rounded()). Angle off \(angle) degrees.")
+            self.debugLabel.text = ("topLeft of (\(((observation.topLeft.x * 100).rounded()/100)), \(((observation.topLeft.y * 100).rounded()/100)). Angle off \(angle) degrees.")
         }
         
         let dateString = Formatter.iso8601.string(from: Date())
@@ -133,10 +146,6 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         let height = (observation.topLeft.y + observation.bottomLeft.y) / 2
         
         server?.setVisionData(data: RectangleData(degreesOfDifference: angle, date: dateString, height: heightFormula(height: height)))
-        /*
-        lock(obj: self.currentData as AnyObject) {
-            self.currentData = RectangleData(degreesOfDifference: angle, date: dateString, height: heightFormula(height: height))
-        }*/
         
     }
 }

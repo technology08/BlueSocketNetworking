@@ -21,13 +21,10 @@ extension ViewController {
             
         }
         
+        // Configures exposure
         if captureDevice.isExposureModeSupported(.locked) {
             do {
                 try captureDevice.lockForConfiguration()
-                //captureDevice.setExposureModeCustom(duration: exposureDuration, iso: minISO) { (time) in
-                //    print("Exposure settings have been applied.")
-                //}
-                //let bias = captureDevice.minExposureTargetBias + 2
                 
                 let bias = defaults.float(forKey: "exposure")
                 
@@ -40,10 +37,10 @@ extension ViewController {
             }
         }
         
-        //Calculates FoV for determining angle
+        // Calculates FoV for determining angle
         self.horizontalFoV = captureDevice.activeFormat.videoFieldOfView
         
-        //Adds rear camera video as input
+        // Adds rear camera video as input
         let input = try AVCaptureDeviceInput(device: captureDevice)
         self.captureSession = AVCaptureSession()
         guard (captureSession?.canAddInput(input))! else {
@@ -52,20 +49,18 @@ extension ViewController {
         }
         captureSession?.addInput(input)
         
-        //Adds delegate as output
+        // Adds delegate as output
         output.setSampleBufferDelegate(self, queue: DispatchQueue(label: "Sample-Buffer-Delegate"))
         guard (captureSession?.canAddOutput(self.output))! else {
             throw CameraError.captureSessionFailedtoAddOutput("Session failed to add output.")
         }
         captureSession?.addOutput(self.output)
         
-        //Orients video
+        // Orients video
         let connection = output.connection(with: .video)
         connection?.videoOrientation = .portrait
         
         captureSession?.startRunning()
-        
-        //setupPreview()
     }
     /**
      This configures an AVPreviewLayer for the ViewController's captureSession and adds it to a new layer of the previewView.
@@ -80,7 +75,10 @@ extension ViewController {
 }
 
 enum CameraError: Error {
+    /// Camera not found in discovery session.
     case captureDeviceNotFound(String)
+    /// Capture Session was unable to add input in do-catch block.
     case captureSessionFailedtoAddInput(String)
+    /// Capture Session was unable to add output in do-catch block.
     case captureSessionFailedtoAddOutput(String)
 }

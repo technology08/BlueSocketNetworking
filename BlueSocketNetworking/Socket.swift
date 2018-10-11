@@ -16,8 +16,12 @@ class EchoServer {
     static let shutdownCommand: String = "SHUTDOWN"
     static let bufferSize = 4096
     
+    /// The `RectangleData` to pass on to the robot
     private var visionData = RectangleData()
+    
+    /// User configured port to connect to on IP Address
     let port: Int
+    
     private var listenSocket: Socket? = nil
     private var continueRunning = true
     private var connectedSockets = [Int32: Socket]()
@@ -27,6 +31,9 @@ class EchoServer {
         self.port = port
     }
     
+    /**
+     Closes the socket and shuts down the server.
+ */
     deinit {
         // Close all open sockets...
         for socket in connectedSockets.values {
@@ -35,6 +42,10 @@ class EchoServer {
         self.listenSocket?.close()
     }
     
+    /**
+     Multi-threaded locking way of the robot fetching the current vision data.
+     - Returns: Current `RectangleData` object.
+ */
     public func getVisionData() -> RectangleData? {
         var returnthing: RectangleData? = nil
         lock(obj: visionData as AnyObject) {
@@ -43,11 +54,21 @@ class EchoServer {
         return returnthing
     }
     
+    /**
+     Update the current vision data from the processing thread.
+     
+     - Parameter data: The most recent data to add to the server.
+ */
+    
     public func setVisionData(data: RectangleData) {
         lock(obj: visionData as AnyObject) {
             self.visionData = data
         }
     }
+    
+    /**
+     Fires up the server and opens a socket.
+ */
     
     func runClient() {
         
@@ -96,7 +117,7 @@ class EchoServer {
         //dispatchMain()
     }
     
-    func addNewConnection(socket: Socket) {
+    private func addNewConnection(socket: Socket) {
         
         // Add the new socket to the list of connected sockets...
         socketLockQueue.sync { [unowned self, socket] in
