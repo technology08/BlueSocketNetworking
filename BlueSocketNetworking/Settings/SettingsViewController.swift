@@ -17,14 +17,16 @@ class SettingsViewController: UIViewController {
     @IBOutlet weak var greenMaxSlider: UISlider!
     @IBOutlet weak var blueMinSlider : UISlider!
     @IBOutlet weak var blueMaxSlider : UISlider!
+    @IBOutlet weak var frameStepper  : UIStepper!
     
     @IBOutlet weak var exposureLabel: UILabel!
-    @IBOutlet weak var redMinLabel  : UILabel!
-    @IBOutlet weak var redMaxLabel  : UILabel!
-    @IBOutlet weak var greenMinLabel: UILabel!
-    @IBOutlet weak var greenMaxLabel: UILabel!
-    @IBOutlet weak var blueMinLabel : UILabel!
-    @IBOutlet weak var blueMaxLabel : UILabel!
+    @IBOutlet weak var redMinLabel      : UILabel!
+    @IBOutlet weak var redMaxLabel      : UILabel!
+    @IBOutlet weak var greenMinLabel    : UILabel!
+    @IBOutlet weak var greenMaxLabel    : UILabel!
+    @IBOutlet weak var blueMinLabel     : UILabel!
+    @IBOutlet weak var blueMaxLabel     : UILabel!
+    @IBOutlet weak var frameDroppedLabel: UILabel!
     
     @IBOutlet weak var imageView: UIImageView!
     
@@ -66,6 +68,7 @@ class SettingsViewController: UIViewController {
         greenMaxSlider.setValue(defaults.float(forKey: "greenMax"), animated: false)
         blueMinSlider .setValue(defaults.float(forKey: "blueMin" ), animated: false)
         blueMaxSlider .setValue(defaults.float(forKey: "blueMax" ), animated: false)
+        frameStepper  .value = defaults.double(forKey: "frames")
         updateLabels()
     }
     
@@ -85,18 +88,25 @@ class SettingsViewController: UIViewController {
         defaults.set(greenMaxSlider.value, forKey: "greenMax")
         defaults.set(blueMinSlider.value,  forKey: "blueMin" )
         defaults.set(blueMaxSlider.value,  forKey: "blueMax" )
+        defaults.set(frameStepper.value, forKey: "frames")
         
         captureSession?.stopRunning()
         captureSession = nil
     }
     
     func updateLabels() {
-        exposureLabel.text = String(Float((exposureSlider.value * 100).rounded())/100)
-        redMinLabel  .text = String(Float((redMinSlider  .value * 100).rounded())/100)
-        redMaxLabel  .text = String(Float((redMaxSlider  .value * 100).rounded())/100)
-        greenMinLabel.text = String(Float((greenMinSlider.value * 100).rounded())/100)
-        greenMaxLabel.text = String(Float((greenMaxSlider.value * 100).rounded())/100)
-        blueMinLabel .text = String(Float((blueMinSlider .value * 100).rounded())/100)
-        blueMaxLabel .text = String(Float((blueMaxSlider .value * 100).rounded())/100)
+        exposureLabel    .text = String(Float((exposureSlider.value * 100).rounded())/100)
+        redMinLabel      .text = String(Float((redMinSlider  .value * 100).rounded())/100)
+        redMaxLabel      .text = String(Float((redMaxSlider  .value * 100).rounded())/100)
+        greenMinLabel    .text = String(Float((greenMinSlider.value * 100).rounded())/100)
+        greenMaxLabel    .text = String(Float((greenMaxSlider.value * 100).rounded())/100)
+        blueMinLabel     .text = String(Float((blueMinSlider .value * 100).rounded())/100)
+        blueMaxLabel     .text = String(Float((blueMaxSlider .value * 100).rounded())/100)
+        frameDroppedLabel.text = String(Int(frameStepper.value.rounded()))
     }
+    
+    @IBAction func stepperChanged(_ sender: Any) {
+        updateLabels()
+    }
+    
 }

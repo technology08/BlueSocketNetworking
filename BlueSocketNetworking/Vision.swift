@@ -48,7 +48,7 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
             } catch {
                 print("Tracking failed: \(error)")
                 debugLabel.text = "Tracking failed: \(error)"
-                if trackingDropped == 5 {
+                if trackingDropped == Int(defaults.double(forKey: "frames")) {
                     //Restart detection
                     lastObservation = nil
                 } else {
