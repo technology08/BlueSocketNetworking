@@ -17,13 +17,13 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         // Configures the filter based on user defaults.
         // Also, only filtered if camera not updated in past 5 frames.
         let (filtered, size) = sampleBuffer.getFilteredImage(
-            redMin:   defaults.float(forKey: "redMin"  ),
-            redMax:   defaults.float(forKey: "redMax"  ),
-            greenMin: defaults.float(forKey: "greenMin"),
-            greenMax: defaults.float(forKey: "greenMax"),
-            blueMin:  defaults.float(forKey: "blueMin" ),
-            blueMax:  defaults.float(forKey: "blueMax" ),
-            filtered: ((lastObservation == nil) ? true : false))
+            redMin:   defaults.float(forKey: DefaultsMap.redMin  ),
+            redMax:   defaults.float(forKey: DefaultsMap.redMax  ),
+            greenMin: defaults.float(forKey: DefaultsMap.greenMin),
+            greenMax: defaults.float(forKey: DefaultsMap.greenMax),
+            blueMin:  defaults.float(forKey: DefaultsMap.blueMin ),
+            blueMax:  defaults.float(forKey: DefaultsMap.blueMax ),
+            filtered: /*((lastObservation == nil) ? */true /*: false)*/)
         self.pixelBufferSize = size
         
         DispatchQueue.main.async {
@@ -44,13 +44,22 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
                 try sequenceRequestHandler.perform([request], on: filtered)
                 let observation = request.results?.first as! VNRectangleObservation
                 processData(observation: observation)
+                
                 self.lastObservation = observation
+                
+                trackingDropped = 0
             } catch {
                 print("Tracking failed: \(error)")
-                debugLabel.text = "Tracking failed: \(error)"
-                if trackingDropped == Int(defaults.double(forKey: "frames")) {
+                //debugLabel.text = "Tracking failed: \(error)"
+                DispatchQueue.main.async {
+                    self.debugLabel.text = (
+                        self.debugValue.appending(" Frames old: \(self.trackingDropped).")
+                    )
+                }
+                if trackingDropped == Int(defaults.double(forKey: DefaultsMap.frames)) {
                     //Restart detection
                     lastObservation = nil
+                    trackingDropped = 0
                 } else {
                     trackingDropped += 1
                 }
@@ -68,10 +77,8 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         let request = VNDetectRectanglesRequest(completionHandler: self.detectHandler)
         request.maximumObservations = 0
         
-        request.minimumAspectRatio = VNAspectRatio(1.88)
-        request.maximumAspectRatio = VNAspectRatio(5)
- 
         request.minimumConfidence = confidence
+        request.minimumSize = 0.02
         
         let handler = VNImageRequestHandler(ciImage: ciImage, options: [:])
         
@@ -90,22 +97,34 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         for result in results {
             /// Probably unnecessary second chance to guarantee `VNRectangleObservation` is greater than user-defined `confidence`
             if result.confidence > confidence {
-                let height = result.topLeft.y - result.bottomLeft.y
-                let width = result.topRight.x - result.topLeft.x
                 
-                let aspectRatio = height / width
+                // IMPORTANT: Coordinate space is (0.0, 0.0) in lower left corner, (1.0, 1.0) in upper right.
+                
+                let height = result.topLeft.y - result.bottomLeft.y
+                //  H2
+                //
+                //
+                //  H1
+                let width = result.topRight.x - result.topLeft.x
+                //  W1       W2
+                //
+                //
+                //
+                
+                let aspectRatio = Float(height / width)
                 
                 print("Detected rect with aspect ratio \(aspectRatio); x: \(result.topLeft.x); y: \(result.topLeft.y); height: \(height); width: \(width)")
                 
                 // Aspect ratio is HEIGHT / WIDTH
-                if aspectRatio >= 0.35 && aspectRatio <= 0.50 {
+                // 0.35x0.50
+                if aspectRatio >= defaults.float(forKey: DefaultsMap.aspectMin) && aspectRatio <= defaults.float(forKey: DefaultsMap.aspectMax) {
                     self.lastObservation = result
                     print("Result points are " + result.topLeft.debugDescription + result.topRight.debugDescription + result.bottomLeft.debugDescription + result.bottomRight.debugDescription)
                     print("Rect found with aspect ratio of \(aspectRatio)")
                     print("Field of View is \(horizontalFoV!) and buffer size is \(pixelBufferSize.height)x\(pixelBufferSize.width)")
                     
                     processData(observation: result)
-                    
+                    lastObservation = result
                     break
                 }
             } else {
@@ -129,16 +148,39 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
      
      - Parameter observation: The observation containing the rectangle of which you want to process.
  */
+    
     func processData(observation: VNRectangleObservation) {
-        guard let observation = self.lastObservation else { return }
-        let centerRectX = (observation.topLeft.x + observation.topRight.x) / 2
+        // guard let observation = self.lastObservation else { return }
         
-        let difference = centerRectX - 0.5
+        // IMPORTANT: Coordinate space is (0.0, 0.0) in lower left corner, (1.0, 1.0) in upper right.
+        
+        // Divide Width / 2
+        let width = observation.topLeft.x + observation.topRight.x
+        // Get the center of the rectangle's width
+        let centerRectX = width / 2
+        // Difference to center of the view (0.5)
+        let difference = 0.5 - centerRectX
         let angle = difference * CGFloat(horizontalFoV!)
         print(angle)
         
+        let heightAspect = observation.topLeft.y - observation.bottomLeft.y
+        let widthAspect = observation.topRight.x - observation.topLeft.x
+        
+        let rect = CGRect(x: observation.bottomLeft.x, y: observation.bottomLeft.y, width: widthAspect, height: heightAspect)
+        
+        let aspectRatio = Float(heightAspect / widthAspect)
+        
+        self.debugValue =
+        """
+        topLeft of (\(((observation.topLeft.x * 100).rounded()/100)), \(((observation.topLeft.y * 100).rounded()/100))).
+        Aspect of \((aspectRatio * 1000).rounded()/1000).
+        Angle off \((angle * 100).rounded()/100) deg.
+        """
+        
         DispatchQueue.main.async {
-            self.debugLabel.text = ("topLeft of (\(((observation.topLeft.x * 100).rounded()/100)), \(((observation.topLeft.y * 100).rounded()/100)). Angle off \(angle) degrees.")
+            self.debugLabel.text = (
+                self.debugValue.appending(" Frames old: \(self.trackingDropped).")
+            )
         }
         
         let dateString = Formatter.iso8601.string(from: Date())

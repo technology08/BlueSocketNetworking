@@ -136,7 +136,7 @@ class EchoServer {
             
             do {
                 // Write the welcome string...
-                try socket.write(from: "Hello, type 'QUIT' to end session\nor 'SHUTDOWN' to stop server.\n")
+                //try socket.write(from: "Hello, type 'QUIT' to end session\nor 'SHUTDOWN' to stop server.\n")
                 
                 repeat {
                     let bytesRead = try socket.read(into: &readData)
@@ -168,7 +168,7 @@ class EchoServer {
                                 return
                                 
                             }
-                            let reply = "Server response: \n\(string)\n"
+                            let reply = string
                             try socket.write(from: reply)
                         } else if request.hasPrefix(EchoServer.quitCommand) || request.hasSuffix(EchoServer.quitCommand) {
                             

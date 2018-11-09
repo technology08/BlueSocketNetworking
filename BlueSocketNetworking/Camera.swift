@@ -26,7 +26,7 @@ extension ViewController {
             do {
                 try captureDevice.lockForConfiguration()
                 
-                let bias = defaults.float(forKey: "exposure")
+                let bias = defaults.float(forKey: DefaultsMap.exposure)
                 
                 captureDevice.setExposureTargetBias(bias) { (time) in
                     print("Configured exposure")
@@ -50,14 +50,14 @@ extension ViewController {
         captureSession?.addInput(input)
         
         // Adds delegate as output
-        output.setSampleBufferDelegate(self, queue: DispatchQueue(label: "Sample-Buffer-Delegate"))
-        guard (captureSession?.canAddOutput(self.output))! else {
+        cameraOutput.setSampleBufferDelegate(self, queue: DispatchQueue(label: "Sample-Buffer-Delegate"))
+        guard (captureSession?.canAddOutput(self.cameraOutput))! else {
             throw CameraError.captureSessionFailedtoAddOutput("Session failed to add output.")
         }
-        captureSession?.addOutput(self.output)
+        captureSession?.addOutput(self.cameraOutput)
         
         // Orients video
-        let connection = output.connection(with: .video)
+        let connection = cameraOutput.connection(with: .video)
         connection?.videoOrientation = .portrait
         
         captureSession?.startRunning()

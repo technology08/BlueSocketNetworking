@@ -23,7 +23,7 @@ class ViewController: UIViewController {
     
     var captureSession: AVCaptureSession?
     //var cameraStream: AVCaptureVideoPreviewLayer?
-    var output = AVCaptureVideoDataOutput()
+    var cameraOutput = AVCaptureVideoDataOutput()
     
     ///The server used for communicating with the robot.
     var server: EchoServer?
@@ -34,11 +34,14 @@ class ViewController: UIViewController {
     
     ///The camera's horizontal field of view in degrees.
     var horizontalFoV: Float?
+    
     ///The size in pixels of the pixel buffer.
     var pixelBufferSize = CGSize(width: 0, height: 0)
     
     ///Confidence level
     var confidence: Float = 0.4
+        
+    var debugValue = "No rectangle detected."
     
     ///The current data ready to be fetched by the server.
     //var currentData = RectangleData()
@@ -55,7 +58,7 @@ class ViewController: UIViewController {
         self.runServer()
         
         // Configure confidence slider
-        confidence = defaults.float(forKey: "confidence")
+        confidence = defaults.float(forKey: DefaultsMap.confidence)
         confidenceSlider.setValue(confidence, animated: false)
         confidenceLabel.text = String(confidence)
     }
@@ -111,6 +114,6 @@ class ViewController: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
-        defaults.set(confidence, forKey: "confidence")
+        defaults.set(confidence, forKey: DefaultsMap.confidence)
     }
 }
