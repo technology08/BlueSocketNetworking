@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0008D29821DFBB69009780EF /* SteamworksTargetDetector.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 0008D29721DFBB68009780EF /* SteamworksTargetDetector.mlmodel */; };
+		0008D29A21DFBBB6009780EF /* CoreML.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0008D29921DFBBB6009780EF /* CoreML.swift */; };
 		0043F2B52113C47A006D754A /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0043F2B42113C47A006D754A /* Extensions.swift */; };
 		0045395B219510B3002B3CC9 /* ChromaFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0045395A219510B3002B3CC9 /* ChromaFilter.swift */; };
 		004CDF2820D56D5100B27546 /* Vision.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004CDF2720D56D5100B27546 /* Vision.swift */; };
@@ -28,6 +30,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0008D29721DFBB68009780EF /* SteamworksTargetDetector.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = SteamworksTargetDetector.mlmodel; sourceTree = "<group>"; };
+		0008D29921DFBBB6009780EF /* CoreML.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreML.swift; sourceTree = "<group>"; };
 		0043F2B42113C47A006D754A /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		0045395A219510B3002B3CC9 /* ChromaFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChromaFilter.swift; sourceTree = "<group>"; };
 		004CDF2720D56D5100B27546 /* Vision.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vision.swift; sourceTree = "<group>"; };
@@ -94,10 +98,12 @@
 				00AC5C0820D3161300B337BD /* Camera.swift */,
 				004CDF2720D56D5100B27546 /* Vision.swift */,
 				00627A8120E5A6490003BB58 /* Filter.swift */,
+				0008D29921DFBBB6009780EF /* CoreML.swift */,
 				0045395A219510B3002B3CC9 /* ChromaFilter.swift */,
 				007B818220D1AF210081D107 /* VisionData.swift */,
 				0043F2B42113C47A006D754A /* Extensions.swift */,
 				00E8911820DE8CC600E64524 /* Debug.swift */,
+				0008D29721DFBB68009780EF /* SteamworksTargetDetector.mlmodel */,
 				008263A4216903BE0033292F /* Settings */,
 				007B817220D18A890081D107 /* Main.storyboard */,
 				007B817520D18A8A0081D107 /* Assets.xcassets */,
@@ -257,6 +263,8 @@
 				007B817120D18A890081D107 /* ViewController.swift in Sources */,
 				0043F2B52113C47A006D754A /* Extensions.swift in Sources */,
 				00AC5C0920D3161300B337BD /* Camera.swift in Sources */,
+				0008D29821DFBB69009780EF /* SteamworksTargetDetector.mlmodel in Sources */,
+				0008D29A21DFBBB6009780EF /* CoreML.swift in Sources */,
 				008C919D2167EA3E002DEF4D /* SettingsViewController.swift in Sources */,
 				007B818320D1AF210081D107 /* VisionData.swift in Sources */,
 				0045395B219510B3002B3CC9 /* ChromaFilter.swift in Sources */,
@@ -416,7 +424,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9PNHQ3XQ2M;
 				INFOPLIST_FILE = BlueSocketNetworking/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -437,7 +445,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9PNHQ3XQ2M;
 				INFOPLIST_FILE = BlueSocketNetworking/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

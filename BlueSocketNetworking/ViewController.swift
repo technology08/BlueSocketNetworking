@@ -30,7 +30,10 @@ class ViewController: UIViewController {
     
     var sequenceRequestHandler = VNSequenceRequestHandler()
     ///The last observation to be passed into the tracking request.
-    var lastObservation: VNRectangleObservation? = nil
+    var lastRectObservation: VNRectangleObservation? = nil
+    
+    ///The last observation to be passed into the tracking request.
+    var lastMLObservation: VNRecognizedObjectObservation? = nil
     
     ///The camera's horizontal field of view in degrees.
     var horizontalFoV: Float?

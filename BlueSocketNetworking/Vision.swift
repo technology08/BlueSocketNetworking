@@ -30,7 +30,13 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
             self.previewImageView.image = UIImage(ciImage: filtered)
         }
        
-        if lastObservation == nil {
+        // i.e. Break the only thing that actually works here in favor of something that ******might****** work
+        //rectangleProcessing(filtered: filtered)
+        mlProcessing(filtered: filtered)
+    }
+    
+    func rectangleProcessing(filtered: CIImage) {
+        if lastRectObservation == nil {
             //First frame, detect and find rectangle
             do {
                 try detectRect(ciImage: filtered)
@@ -39,13 +45,13 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
             }
         } else {
             //Continue tracking
-            let request = VNTrackRectangleRequest(rectangleObservation: lastObservation!)
+            let request = VNTrackRectangleRequest(rectangleObservation: lastRectObservation!)
             do {
                 try sequenceRequestHandler.perform([request], on: filtered)
                 let observation = request.results?.first as! VNRectangleObservation
                 processData(observation: observation)
                 
-                self.lastObservation = observation
+                self.lastRectObservation = observation
                 
                 trackingDropped = 0
             } catch {
@@ -58,14 +64,13 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
                 }
                 if trackingDropped == Int(defaults.double(forKey: DefaultsMap.frames)) {
                     //Restart detection
-                    lastObservation = nil
+                    lastRectObservation = nil
                     trackingDropped = 0
                 } else {
                     trackingDropped += 1
                 }
             }
         }
-        
     }
     
     
@@ -74,7 +79,7 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
      - Parameter ciImage: The color-filtered Core Image object to have tracking performed on.
      */
     func detectRect(ciImage: CIImage) throws {
-        let request = VNDetectRectanglesRequest(completionHandler: self.detectHandler)
+        let request = VNDetectRectanglesRequest(completionHandler: self.detectRectHandler)
         request.maximumObservations = 0
         
         request.minimumConfidence = confidence
@@ -88,7 +93,7 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
     /**
      The completion handler following the initial detection.
      */
-    func detectHandler(request: VNRequest, error: Error?) {
+    func detectRectHandler(request: VNRequest, error: Error?) {
         guard let results = request.results as? [VNRectangleObservation] else {
             return
         }
@@ -118,13 +123,13 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
                 // Aspect ratio is HEIGHT / WIDTH
                 // 0.35x0.50
                 if aspectRatio >= defaults.float(forKey: DefaultsMap.aspectMin) && aspectRatio <= defaults.float(forKey: DefaultsMap.aspectMax) {
-                    self.lastObservation = result
+                    self.lastRectObservation = result
                     print("Result points are " + result.topLeft.debugDescription + result.topRight.debugDescription + result.bottomLeft.debugDescription + result.bottomRight.debugDescription)
                     print("Rect found with aspect ratio of \(aspectRatio)")
                     print("Field of View is \(horizontalFoV!) and buffer size is \(pixelBufferSize.height)x\(pixelBufferSize.width)")
                     
                     processData(observation: result)
-                    lastObservation = result
+                    lastRectObservation = result
                     break
                 }
             } else {
