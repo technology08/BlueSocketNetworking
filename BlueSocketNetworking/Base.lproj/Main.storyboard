@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="77M-y8-d2C">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="77M-y8-d2C">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -506,6 +505,108 @@
             </objects>
             <point key="canvasLocation" x="1133.5999999999999" y="846.02698650674665"/>
         </scene>
+        <!--Data Capture-->
+        <scene sceneID="axh-PN-Stz">
+            <objects>
+                <viewController id="agZ-8W-Ri9" customClass="DataCaptureViewController" customModule="BlueSocketNetworking" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="StX-fU-g93">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vJi-jJ-NO3">
+                                <rect key="frame" x="0.0" y="64" width="375" height="507"/>
+                            </imageView>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="T1A-Lw-8mi">
+                                <rect key="frame" x="318" y="579" width="51" height="31"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="31" id="aJK-vP-rBe"/>
+                                </constraints>
+                            </switch>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Filtered:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PAb-Zn-fBf">
+                                <rect key="frame" x="248" y="584" width="62" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q7N-BV-EGy">
+                                <rect key="frame" x="0.0" y="571" width="240" height="47"/>
+                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" title="Capture">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="capturePressed:" destination="agZ-8W-Ri9" eventType="touchUpInside" id="RZz-Jx-Aix"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="fmb-pE-peP" firstAttribute="bottom" secondItem="T1A-Lw-8mi" secondAttribute="bottom" constant="8" id="4vE-d7-TkS"/>
+                            <constraint firstItem="vJi-jJ-NO3" firstAttribute="leading" secondItem="fmb-pE-peP" secondAttribute="leading" id="5xV-AL-WLu"/>
+                            <constraint firstItem="vJi-jJ-NO3" firstAttribute="trailing" secondItem="fmb-pE-peP" secondAttribute="trailing" id="J7f-bc-Ntn"/>
+                            <constraint firstItem="T1A-Lw-8mi" firstAttribute="leading" secondItem="PAb-Zn-fBf" secondAttribute="trailing" constant="8" id="Kqu-XZ-IPj"/>
+                            <constraint firstItem="fmb-pE-peP" firstAttribute="trailing" secondItem="T1A-Lw-8mi" secondAttribute="trailing" constant="8" id="OaA-GS-KFd"/>
+                            <constraint firstItem="PAb-Zn-fBf" firstAttribute="centerY" secondItem="Q7N-BV-EGy" secondAttribute="centerY" id="Ru6-gj-Cgm"/>
+                            <constraint firstItem="vJi-jJ-NO3" firstAttribute="top" secondItem="fmb-pE-peP" secondAttribute="top" id="Y47-3H-UHQ"/>
+                            <constraint firstItem="Q7N-BV-EGy" firstAttribute="leading" secondItem="fmb-pE-peP" secondAttribute="leading" id="bNo-8h-4sL"/>
+                            <constraint firstItem="PAb-Zn-fBf" firstAttribute="leading" secondItem="Q7N-BV-EGy" secondAttribute="trailing" constant="8" id="guN-aP-lCt"/>
+                            <constraint firstItem="Q7N-BV-EGy" firstAttribute="top" secondItem="vJi-jJ-NO3" secondAttribute="bottom" id="j5G-ed-DuE"/>
+                            <constraint firstItem="fmb-pE-peP" firstAttribute="bottom" secondItem="Q7N-BV-EGy" secondAttribute="bottom" id="xHF-Sd-q1b"/>
+                            <constraint firstItem="T1A-Lw-8mi" firstAttribute="top" secondItem="vJi-jJ-NO3" secondAttribute="bottom" constant="8" id="yB1-qg-Ywb"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="fmb-pE-peP"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Data Capture" id="2CP-1g-ahF">
+                        <barButtonItem key="leftBarButtonItem" title="Delete All" id="rMS-Rt-Sqq">
+                            <connections>
+                                <action selector="cancelPressed:" destination="agZ-8W-Ri9" id="hll-ZT-OtI"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Export" id="0e1-jS-zhf">
+                            <connections>
+                                <action selector="export:" destination="agZ-8W-Ri9" id="XWe-G6-b9N"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="button" destination="Q7N-BV-EGy" id="fDm-T4-QLR"/>
+                        <outlet property="cancelButton" destination="rMS-Rt-Sqq" id="YHB-29-KAu"/>
+                        <outlet property="captureView" destination="vJi-jJ-NO3" id="ktr-s3-JRQ"/>
+                        <outlet property="filteredSwitch" destination="T1A-Lw-8mi" id="ZBd-kf-Rfg"/>
+                        <outlet property="percentView" destination="lu1-Ke-W5I" id="Pfh-BU-JIV"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="75M-oV-U66" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <view contentMode="scaleToFill" id="lu1-Ke-W5I" customClass="PercentView" customModule="BlueSocketNetworking" customModuleProvider="target">
+                    <rect key="frame" x="0.0" y="0.0" width="240" height="55"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" ambiguous="YES" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Dnl-Zf-51n">
+                            <rect key="frame" x="16" y="16" width="208" height="2"/>
+                        </progressView>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0% complete" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wFU-hE-vhd">
+                            <rect key="frame" x="70" y="26" width="100" height="21"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="wFU-hE-vhd" firstAttribute="top" secondItem="Dnl-Zf-51n" secondAttribute="bottom" constant="8" id="4Lo-tF-0r0"/>
+                        <constraint firstItem="wFU-hE-vhd" firstAttribute="centerX" secondItem="lu1-Ke-W5I" secondAttribute="centerX" id="8e7-U9-vfn"/>
+                        <constraint firstItem="0S7-9Z-Jlg" firstAttribute="bottom" secondItem="wFU-hE-vhd" secondAttribute="bottom" constant="8" id="OdV-Bc-tYh"/>
+                        <constraint firstItem="Dnl-Zf-51n" firstAttribute="top" secondItem="0S7-9Z-Jlg" secondAttribute="top" constant="16" id="UTT-0n-kqk"/>
+                    </constraints>
+                    <viewLayoutGuide key="safeArea" id="0S7-9Z-Jlg"/>
+                    <connections>
+                        <outlet property="progressBar" destination="Dnl-Zf-51n" id="pEf-03-mJe"/>
+                        <outlet property="progressLabel" destination="wFU-hE-vhd" id="7lk-po-4QK"/>
+                    </connections>
+                </view>
+            </objects>
+            <point key="canvasLocation" x="1135" y="1654"/>
+        </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="Qds-2T-98Q">
             <objects>
@@ -519,6 +620,7 @@
                     <connections>
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="mDP-D3-okG"/>
                         <segue destination="9dI-nf-dAs" kind="relationship" relationship="viewControllers" id="FWQ-U8-qaX"/>
+                        <segue destination="t7s-9t-wTl" kind="relationship" relationship="viewControllers" id="u4H-qW-nzc"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CZ9-SJ-dFa" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -543,6 +645,25 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OaD-fc-6fa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="138" y="848"/>
+        </scene>
+        <!--Data Capture-->
+        <scene sceneID="k9U-a9-bWW">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="t7s-9t-wTl" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Data Capture" id="6tw-vR-rvG"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="lVT-tS-SMC">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="agZ-8W-Ri9" kind="relationship" relationship="rootViewController" id="1ay-PX-kya"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="tLV-FN-nPB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="137" y="1654"/>
         </scene>
     </scenes>
 </document>
