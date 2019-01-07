@@ -41,12 +41,12 @@ extension ViewController {
                 
                 let boundingBox = result.boundingBox
                
-                let height = boundingBox.height / pixelBufferSize.height
+                //let height = boundingBox.height / pixelBufferSize.height
                 //  H2
                 //
                 //
                 //  H1
-                let width = boundingBox.width / pixelBufferSize.width
+                //let width = boundingBox.width / pixelBufferSize.width
                 //  W1       W2
                 //
                 //
@@ -55,12 +55,11 @@ extension ViewController {
                 // Aspect ratio is HEIGHT / WIDTH
                 // 0.35x0.50
                 
-                self.lastMLObservation = result
+                self.lastMLObservation = VNDetectedObjectObservation(boundingBox: result.boundingBox)
                 print("Dimensions are " + String(describing: boundingBox.minX) + String(describing: boundingBox.minY) + String(describing: boundingBox.width) + String(describing: boundingBox.height))
                 print("Field of View is \(horizontalFoV!) and buffer size is \(pixelBufferSize.height)x\(pixelBufferSize.width)")
                 
-                processMLData(observation: result)
-                lastMLObservation = result
+                processMLData(observation: self.lastMLObservation!)
                 break
                 
             } else {
@@ -81,7 +80,7 @@ extension ViewController {
      - Parameter observation: The observation containing the rectangle of which you want to process.
      */
     
-    func processMLData(observation: VNRecognizedObjectObservation) {
+    func processMLData(observation: VNDetectedObjectObservation) {
         // guard let observation = self.lastObservation else { return }
         
         // IMPORTANT: Coordinate space is (0.0, 0.0) in lower left corner, (1.0, 1.0) in upper right.
@@ -124,7 +123,7 @@ extension ViewController {
     }
     
     func mlProcessing(filtered: CIImage) {
-        if lastRectObservation == nil {
+        if lastMLObservation == nil {
             //First frame, detect and find rectangle
             do {
                 try detectML(ciImage: filtered)
@@ -136,10 +135,10 @@ extension ViewController {
             let request = VNTrackObjectRequest(detectedObjectObservation: self.lastMLObservation!)
             do {
                 try sequenceRequestHandler.perform([request], on: filtered)
-                let observation = request.results?.first as! VNRecognizedObjectObservation
-                processMLData(observation: observation)
+                let detected = request.results?.first as! VNDetectedObjectObservation
+                processMLData(observation: detected)
                 
-                self.lastMLObservation = observation
+                self.lastMLObservation = detected
                 
                 trackingDropped = 0
             } catch {

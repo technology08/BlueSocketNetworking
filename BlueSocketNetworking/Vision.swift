@@ -171,7 +171,7 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         let heightAspect = observation.topLeft.y - observation.bottomLeft.y
         let widthAspect = observation.topRight.x - observation.topLeft.x
         
-        let rect = CGRect(x: observation.bottomLeft.x, y: observation.bottomLeft.y, width: widthAspect, height: heightAspect)
+        //let rect = CGRect(x: observation.bottomLeft.x, y: observation.bottomLeft.y, width: widthAspect, height: heightAspect)
         
         let aspectRatio = Float(heightAspect / widthAspect)
         

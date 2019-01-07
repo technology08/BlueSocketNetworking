@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		0008D29821DFBB69009780EF /* SteamworksTargetDetector.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 0008D29721DFBB68009780EF /* SteamworksTargetDetector.mlmodel */; };
 		0008D29A21DFBBB6009780EF /* CoreML.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0008D29921DFBBB6009780EF /* CoreML.swift */; };
+		000D994721E15274007D71C7 /* DataCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000D994621E15274007D71C7 /* DataCaptureViewController.swift */; };
+		000D994921E153D0007D71C7 /* DataCaptureCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000D994821E153D0007D71C7 /* DataCaptureCamera.swift */; };
+		000D994B21E1551B007D71C7 /* DrawView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000D994A21E1551B007D71C7 /* DrawView.swift */; };
+		00183B0221E29421003D3D37 /* PercentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00183B0121E29421003D3D37 /* PercentView.swift */; };
 		0043F2B52113C47A006D754A /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0043F2B42113C47A006D754A /* Extensions.swift */; };
 		0045395B219510B3002B3CC9 /* ChromaFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0045395A219510B3002B3CC9 /* ChromaFilter.swift */; };
 		004CDF2820D56D5100B27546 /* Vision.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004CDF2720D56D5100B27546 /* Vision.swift */; };
@@ -32,6 +36,10 @@
 /* Begin PBXFileReference section */
 		0008D29721DFBB68009780EF /* SteamworksTargetDetector.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = SteamworksTargetDetector.mlmodel; sourceTree = "<group>"; };
 		0008D29921DFBBB6009780EF /* CoreML.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreML.swift; sourceTree = "<group>"; };
+		000D994621E15274007D71C7 /* DataCaptureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataCaptureViewController.swift; sourceTree = "<group>"; };
+		000D994821E153D0007D71C7 /* DataCaptureCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataCaptureCamera.swift; sourceTree = "<group>"; };
+		000D994A21E1551B007D71C7 /* DrawView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawView.swift; sourceTree = "<group>"; };
+		00183B0121E29421003D3D37 /* PercentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PercentView.swift; sourceTree = "<group>"; };
 		0043F2B42113C47A006D754A /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		0045395A219510B3002B3CC9 /* ChromaFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChromaFilter.swift; sourceTree = "<group>"; };
 		004CDF2720D56D5100B27546 /* Vision.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vision.swift; sourceTree = "<group>"; };
@@ -70,6 +78,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		000D993C21E14BEA007D71C7 /* Data Capture */ = {
+			isa = PBXGroup;
+			children = (
+				000D994621E15274007D71C7 /* DataCaptureViewController.swift */,
+				000D994821E153D0007D71C7 /* DataCaptureCamera.swift */,
+				000D994A21E1551B007D71C7 /* DrawView.swift */,
+				00183B0121E29421003D3D37 /* PercentView.swift */,
+			);
+			path = "Data Capture";
+			sourceTree = "<group>";
+		};
 		007B816220D18A890081D107 = {
 			isa = PBXGroup;
 			children = (
@@ -105,6 +124,7 @@
 				00E8911820DE8CC600E64524 /* Debug.swift */,
 				0008D29721DFBB68009780EF /* SteamworksTargetDetector.mlmodel */,
 				008263A4216903BE0033292F /* Settings */,
+				000D993C21E14BEA007D71C7 /* Data Capture */,
 				007B817220D18A890081D107 /* Main.storyboard */,
 				007B817520D18A8A0081D107 /* Assets.xcassets */,
 				007B817720D18A8A0081D107 /* LaunchScreen.storyboard */,
@@ -242,10 +262,12 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-BlueSocketNetworking/Pods-BlueSocketNetworking-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/BlueSocket/Socket.framework",
+				"${BUILT_PRODUCTS_DIR}/Zip/Zip.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Socket.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Zip.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -264,13 +286,17 @@
 				0043F2B52113C47A006D754A /* Extensions.swift in Sources */,
 				00AC5C0920D3161300B337BD /* Camera.swift in Sources */,
 				0008D29821DFBB69009780EF /* SteamworksTargetDetector.mlmodel in Sources */,
+				000D994921E153D0007D71C7 /* DataCaptureCamera.swift in Sources */,
+				00183B0221E29421003D3D37 /* PercentView.swift in Sources */,
 				0008D29A21DFBBB6009780EF /* CoreML.swift in Sources */,
 				008C919D2167EA3E002DEF4D /* SettingsViewController.swift in Sources */,
+				000D994721E15274007D71C7 /* DataCaptureViewController.swift in Sources */,
 				007B818320D1AF210081D107 /* VisionData.swift in Sources */,
 				0045395B219510B3002B3CC9 /* ChromaFilter.swift in Sources */,
 				0082655621722E1100CDEEB3 /* DefaultsMap.swift in Sources */,
 				004CDF2820D56D5100B27546 /* Vision.swift in Sources */,
 				007B816F20D18A890081D107 /* AppDelegate.swift in Sources */,
+				000D994B21E1551B007D71C7 /* DrawView.swift in Sources */,
 				00627A8220E5A6490003BB58 /* Filter.swift in Sources */,
 				00E8911920DE8CC600E64524 /* Debug.swift in Sources */,
 				007B818120D18EF00081D107 /* Socket.swift in Sources */,

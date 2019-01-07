@@ -7,4 +7,5 @@ target 'BlueSocketNetworking' do
 
   # Pods for BlueSocketNetworking
   pod 'BlueSocket'
+  pod 'Zip', '~> 1.1'
 end
