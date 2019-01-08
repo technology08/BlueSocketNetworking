@@ -20,6 +20,7 @@ class DataCaptureViewController: UIViewController {
     
     let defaults = UserDefaults.standard
     
+    var currentLabelName = "2019angledvision"
     var captureSession: AVCaptureSession? = nil
     var output = AVCaptureVideoDataOutput()
     var device: AVCaptureDevice? = nil
@@ -69,33 +70,46 @@ class DataCaptureViewController: UIViewController {
             
             handleView = HandlesView(frame: self.captureView.bounds)
             handleView!.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-            self.view.addSubview(handleView!)
+            self.captureView.addSubview(handleView!)
             
             //Custom property that contains the selected area of the rectangle. Its updated while resizing.
             handleView?.setSelectedFrame(CGRect(x: 128.0, y: 128.0, width: 200.0, height: 200.0))
+            captureView.isUserInteractionEnabled = true
         case .BoundingBox:
             
             let boundingBox = handleView!.selectedFrame!
             mode = .Capture
             
-            let randomIDNumber = Int.random(in: 1..<9999)
-            let string = "x: \(boundingBox.minX), y: \(boundingBox.minY), height: \(boundingBox.height), width: \(boundingBox.width)"
+            let frameSize = captureView.frame.size
             
-            let textFile = "annotations-\(randomIDNumber).txt" //this is the file. we will write to and read from it
-            let imageFile = "img-\(randomIDNumber).jpg"
+            let randomIDNumber = Int.random(in: 1..<9999)
+            
+            //Assuming image output resolution is 1080x1920
+            let outputWidth : CGFloat = 1080
+            let outputHeight: CGFloat = 1920
+            
+            let string = "{\"coordinates\": {\"x\": \(boundingBox.minX / frameSize.width * outputWidth), \"y\": \(boundingBox.minY / frameSize.height * outputHeight), \"height\": \(boundingBox.height / frameSize.height * outputHeight), \"width\": \(boundingBox.width / frameSize.height * outputHeight)}, \"label\": \"\(currentLabelName)\"}"
+            
+            let textFile = "annotations/\(randomIDNumber).txt" //this is the file. we will write to and read from it
+            let imageFile = "img/\(randomIDNumber).png"
             
             if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
                 
                 let textFileURL = dir.appendingPathComponent(textFile)
                 let imageFileURL = dir.appendingPathComponent(imageFile)
                 
+                let textFolder = dir.appendingPathComponent("annotations")
+                let imageFolder = dir.appendingPathComponent("img")
+                
                 do {
+                    try FileManager.default.createDirectory(at: textFolder, withIntermediateDirectories: true, attributes: nil)
+                    try FileManager.default.createDirectory(at: imageFolder, withIntermediateDirectories: true, attributes: nil)
                     try string.write(to: textFileURL, atomically: false, encoding: .utf8)
-                    let image = self.currentImage!
+                    let image = self.captureView.image!
                     let png = image.pngData()
                     try png?.write(to: imageFileURL)
                 } catch {
-                    fatalError(error as! String)
+                    fatalError(error.localizedDescription)
                 }
                 
             }
