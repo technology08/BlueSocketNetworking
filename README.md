@@ -13,8 +13,8 @@ There are two filters in this project. The first is a color filter, using a CICo
 - [x] TCP Socket communnicates random JSON data to robot 
 - [x] Camera is set up
 - [x] Color filter
-- [ ] Aspect ratio filter
 - [x] Rectangle detection
-- [ ] Rectangle tracking
-- [ ] Calculating angle from data
-- [ ] Sending correct data over in a JSON format to robot
+- [x] Rectangle tracking
+- [x] Calculating angle from data
+- [x] Custom ML YOLO Model
+- [x] Sending correct data over in a JSON format to robot
