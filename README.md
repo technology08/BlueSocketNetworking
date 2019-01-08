@@ -16,5 +16,6 @@ There are two filters in this project. The first is a color filter, using a CICo
 - [x] Rectangle detection
 - [x] Rectangle tracking
 - [x] Calculating angle from data
-- [x] Custom ML YOLO Model
+- [x] [Custom ML YOLO Model detection](https://github.com/technology08/2019-Data-Capture)
+- [ ] Custom ML YOLO Model tracking
 - [x] Sending correct data over in a JSON format to robot
