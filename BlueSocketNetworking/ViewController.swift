@@ -15,9 +15,10 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var debugLabel: UILabel!
     @IBOutlet weak var previewView: UIView!
-    @IBOutlet weak var previewImageView: UIImageView!    
+    @IBOutlet weak var previewImageView: UIImageView!
     @IBOutlet weak var confidenceSlider: UISlider!
     @IBOutlet weak var confidenceLabel: UILabel!
+    @IBOutlet weak var debugView: DebugView!
     
     //AVCapture variables
     
@@ -30,7 +31,10 @@ class ViewController: UIViewController {
     
     var sequenceRequestHandler = VNSequenceRequestHandler()
     ///The last observation to be passed into the tracking request.
-    var lastObservation: VNRectangleObservation? = nil
+    var lastRectObservation: VNRectangleObservation? = nil
+    
+    ///The last observation to be passed into the tracking request.
+    var lastMLObservation: VNDetectedObjectObservation? = nil
     
     ///The camera's horizontal field of view in degrees.
     var horizontalFoV: Float?
@@ -50,6 +54,8 @@ class ViewController: UIViewController {
     let defaults = UserDefaults.standard
     
     var trackingDropped = 0
+    
+    var timeCounter = 0.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
