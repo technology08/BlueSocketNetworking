@@ -17,7 +17,7 @@ extension DataCaptureViewController {
         //Finds rear camera
         guard let captureDevice = AVCaptureDevice.default(AVCaptureDevice.DeviceType.builtInWideAngleCamera, for: .video, position: .back) else {
             
-            throw CameraError.captureDeviceNotFound("Built-in wide angle video back camera not found.")
+            throw Errors.captureDeviceNotFound("Built-in wide angle video back camera not found.")
             
         }
         
@@ -46,14 +46,14 @@ extension DataCaptureViewController {
         self.captureSession = AVCaptureSession()
         guard (captureSession?.canAddInput(input))! else {
             
-            throw CameraError.captureSessionFailedtoAddInput("Session failed to add input.")
+            throw Errors.captureSessionFailedtoAddInput("Session failed to add input.")
         }
         captureSession?.addInput(input)
         
         //Adds delegate as output
         output.setSampleBufferDelegate(self, queue: DispatchQueue(label: "Sample-Buffer-Delegate"))
         guard (captureSession?.canAddOutput(self.output))! else {
-            throw CameraError.captureSessionFailedtoAddOutput("Session failed to add output.")
+            throw Errors.captureSessionFailedtoAddOutput("Session failed to add output.")
         }
         captureSession?.addOutput(self.output)
         

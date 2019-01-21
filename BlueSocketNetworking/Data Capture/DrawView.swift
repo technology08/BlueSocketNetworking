@@ -85,10 +85,10 @@ class HandlesView: UIView {
             super.backgroundColor = UIColor.clear
             
             // Set our rectangle's color.
-            rectangle.backgroundColor = backgroundColor?.withAlphaComponent(0.5)
+            rectangle.backgroundColor = backgroundColor?.withAlphaComponent(0.25)
             
             for handle in handles {
-                handle.backgroundColor = backgroundColor
+                handle.backgroundColor = backgroundColor?.withAlphaComponent(0.5)
             }
         }
     }
@@ -152,15 +152,5 @@ class HandlesView: UIView {
             handle.removeFromSuperview()
         }
         self.removeFromSuperview()
-    }
-}
-
-func returnGreatest(object1: CGFloat, object2: CGFloat) -> CGFloat {
-    if object1 > object2 {
-        return object1
-    } else if object2 > object1 {
-        return object2
-    } else {
-        return object1
     }
 }

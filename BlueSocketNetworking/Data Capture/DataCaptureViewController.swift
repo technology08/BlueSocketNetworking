@@ -19,6 +19,8 @@ class DataCaptureViewController: UIViewController {
     @IBOutlet var percentView: PercentView!
     
     let defaults = UserDefaults.standard
+    @IBOutlet weak var labelStepper: UIStepper!
+    @IBOutlet weak var labelLabel: UILabel!
     
     var currentLabelName = "2019angledvision"
     var captureSession: AVCaptureSession? = nil
@@ -169,6 +171,14 @@ class DataCaptureViewController: UIViewController {
             }
             
         }
+    }
+    @IBAction func stepperChanged(_ sender: Any) {
+        labelLabel.text = String(labelStepper.value)
+        if labelStepper.value == 0.0 {
+            currentLabelName = "2019angledvision"
+        } else {
+            currentLabelName = String(Int(labelStepper.value))
+        }   
     }
     
 }

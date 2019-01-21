@@ -15,9 +15,10 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var debugLabel: UILabel!
     @IBOutlet weak var previewView: UIView!
-    @IBOutlet weak var previewImageView: UIImageView!    
+    @IBOutlet weak var previewImageView: UIImageView!
     @IBOutlet weak var confidenceSlider: UISlider!
     @IBOutlet weak var confidenceLabel: UILabel!
+    @IBOutlet weak var debugView: DebugView!
     
     //AVCapture variables
     
@@ -53,6 +54,8 @@ class ViewController: UIViewController {
     let defaults = UserDefaults.standard
     
     var trackingDropped = 0
+    
+    var timeCounter = 0.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
