@@ -19,16 +19,32 @@ extension ViewController {
                 print("This is where it failed: \(error)")
             }
         } else {
+            /*
+            let detectionQueue = DispatchQueue(label: "detection")
+            detectionQueue.async {
+                do {
+                    try self.detectRect(ciImage: filtered)
+                } catch {
+                    print("This is where it failed background: \(error)")
+                }
+            }*/
             //Continue tracking
-            let request = VNTrackRectangleRequest(rectangleObservation: lastRectObservation!)
+            let request = VNTrackObjectRequest(detectedObjectObservation: lastMLObservation!)//VNTrackRectangleRequest(rectangleObservation: lastRectObservation!)
             do {
                 try sequenceRequestHandler.perform([request], on: filtered)
-                let observation = request.results?.first as! VNRectangleObservation
-                processData(observation: observation)
+                guard let results = (request.results as? [VNDetectedObjectObservation])?.sorted(by: { (item1, item2) -> Bool in item1.confidence > item2.confidence }) else { throw Errors.trackingFailed("No results in tracking request.") }
+                guard let detected = results.first else { throw Errors.trackingFailed("No results in tracking request.")}
                 
-                self.lastRectObservation = observation
+                print(detected.confidence)
+                if detected.confidence > confidence {
+                    processMLData(observation: detected)
                 
-                trackingDropped = 0
+                    self.lastMLObservation = detected
+                
+                    trackingDropped = 0
+                } else {
+                    throw Errors.trackingFailed("Result was \(confidence) for confidence and thus below confidence threshold.")
+                }
             } catch {
                 print("Tracking failed: \(error)")
                 //debugLabel.text = "Tracking failed: \(error)"
@@ -39,8 +55,11 @@ extension ViewController {
                 }
                 if trackingDropped == Int(defaults.double(forKey: DefaultsMap.frames)) {
                     //Restart detection
-                    lastRectObservation = nil
+                    lastMLObservation = nil
                     trackingDropped = 0
+                    DispatchQueue.main.async {
+                        self.debugView.removeRect()
+                    }
                 } else {
                     trackingDropped += 1
                 }
@@ -58,7 +77,7 @@ extension ViewController {
         request.maximumObservations = 0
         
         request.minimumConfidence = confidence
-        request.minimumSize = 0.02
+        request.minimumSize = 0.05
         
         let handler = VNImageRequestHandler(ciImage: ciImage, options: [:])
         
@@ -82,13 +101,22 @@ extension ViewController {
             }
         }
         
+        results = results.filter({ (observation) -> Bool in
+            let width = observation.bottomRight.x - observation.bottomLeft.x
+            if width > 0.04 {
+                return true
+            } else {
+                return false
+            }
+        })
+        
         // Sort remaining by confidence
         results = results.sorted { (first, next) -> Bool in
             first.confidence > next.confidence
         }
         
         // Run through sequence of results
-        for result in results {
+        for (index, result) in results.enumerated() {
             
             // IMPORTANT: Coordinate space is (0.0, 0.0) in lower left corner, (1.0, 1.0) in upper right.
             
@@ -112,6 +140,24 @@ extension ViewController {
             // Aspect ratio is HEIGHT / WIDTH
             // 0.35x0.50
             if aspectRatio >= defaults.float(forKey: DefaultsMap.aspectMin) && aspectRatio <= defaults.float(forKey: DefaultsMap.aspectMax) {
+                
+                if (index + 1) < results.count{
+                    if isIntersectionAbove(target1: result, target2: results[index+1]) {
+                        // Group of two
+                        DispatchQueue.main.async {
+                            print("HI THERE")
+                            let observation = groupResults(target1: result, target2: results[index+1])
+                            self.rectangle1 = result
+                            self.rectangle2 = results[index+1]
+                            self.lastMLObservation = observation
+                            self.processMLData(observation: observation)
+                        }
+                        
+                        break
+                    }
+                }
+                
+                /*
                 self.lastRectObservation = result
                 print("Result points are " + result.topLeft.debugDescription + result.topRight.debugDescription + result.bottomLeft.debugDescription + result.bottomRight.debugDescription)
                 print("Rect found with aspect ratio of \(aspectRatio)")
@@ -119,7 +165,7 @@ extension ViewController {
                 
                 processData(observation: result)
                 lastRectObservation = result
-                break
+                break*/
             }
         }
         

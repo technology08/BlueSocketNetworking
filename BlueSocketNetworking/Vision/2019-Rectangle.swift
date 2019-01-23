@@ -43,8 +43,11 @@ public func isIntersectionAbove(target1: VNRectangleObservation, target2: VNRect
     let line1 = Line(p1: target1.bottomLeft, p2: target1.topLeft)
     let line2 = Line(p1: target2.bottomRight, p2: target2.topRight)
     
-    guard let interserctionPoint = line1.intersection(of: line2) else { return false }
-    if interserctionPoint.y > target1.topLeft.y && interserctionPoint.y > target2.topLeft.y {
+    guard let intersectionPoint = line1.intersection(of: line2) else { return false }
+    if intersectionPoint.y > target1.topLeft.y && intersectionPoint.y > target2.topLeft.y {
+        print(intersectionPoint)
+        print("ABOVE")
+        print(target1.topLeft)
         return true
     } else {
         return false
@@ -60,18 +63,22 @@ public func groupResults(target1: VNRectangleObservation, target2: VNRectangleOb
     
     // Most left determination
     
-    let xValues = [target1.topLeft.x, target1.bottomLeft.x, target2.topLeft.x, target2.bottomLeft.x]
-    x = xValues.min()!
+    x = [target1.topLeft.x, target1.bottomLeft.x, target2.topLeft.x, target2.bottomLeft.x].min()!
     // Lowest point determination
     
-    let yValues = [target1.topLeft.y, target1.topRight.y, target2.topLeft.y, target2.topRight.y]
-    y = yValues.min()!
+    y = [target1.topLeft.y, target1.topRight.y, target2.topLeft.y, target2.topRight.y].min()!
     
-    width = xValues.max()! - xValues.min()!
-    height = yValues.max()! - yValues.min()!
+    let allX = [target1.topLeft.x, target1.bottomLeft.x, target2.topLeft.x, target2.bottomLeft.x, target1.topRight.x, target1.bottomRight.x, target2.topRight.x, target2.bottomRight.x]
+    
+    width = allX.max()! - allX.min()!
+    
+    let allY = [target1.topLeft.y, target1.topRight.y, target2.topLeft.y, target2.topRight.y, target1.bottomLeft.y, target1.bottomRight.y, target2.bottomLeft.y, target2.bottomRight.y]
+    height = allY.max()! - allY.min()!
     
     let combinedRect = CGRect(x: x, y: y, width: width, height: height)
     
     let observation = VNDetectedObjectObservation(boundingBox: combinedRect)
     return observation
 }
+
+// NEXT STEPS: Try two TrackRectangles algorithms simultaneously, where we can get the center from those.

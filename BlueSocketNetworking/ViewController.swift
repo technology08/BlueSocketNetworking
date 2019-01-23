@@ -44,6 +44,11 @@ class ViewController: UIViewController {
     
     ///Confidence level
     var confidence: Float = 0.4
+    
+    var rectangle1: VNRectangleObservation? = nil
+    var rectangle1Tracker = VNSequenceRequestHandler()
+    var rectangle2: VNRectangleObservation? = nil
+    var rectangle2Tracker = VNSequenceRequestHandler()
         
     var debugValue = "No rectangle detected."
     
