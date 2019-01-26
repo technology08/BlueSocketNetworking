@@ -30,7 +30,7 @@ extension CIImage {
         kernel vec4 thresholdFilter(__sample textureColor, float redMin, float redMax, float greenMin, float greenMax, float blueMin, float blueMax) {
 
             if (textureColor.r > redMin && textureColor.r < redMax && textureColor.g > greenMin && textureColor.g < greenMax && textureColor.b > blueMin && textureColor.b < blueMax) {
-
+                
             } else {
                 textureColor.rgb = vec3(0.0, 0.0, 0.0);
             }

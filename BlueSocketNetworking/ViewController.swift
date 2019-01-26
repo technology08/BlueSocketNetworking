@@ -45,9 +45,9 @@ class ViewController: UIViewController {
     ///Confidence level
     var confidence: Float = 0.4
     
-    var rectangle1: VNRectangleObservation? = nil
+    var lastRect1: VNRectangleObservation? = nil
+    var lastRect2: VNRectangleObservation? = nil
     var rectangle1Tracker = VNSequenceRequestHandler()
-    var rectangle2: VNRectangleObservation? = nil
     var rectangle2Tracker = VNSequenceRequestHandler()
         
     var debugValue = "No rectangle detected."
@@ -87,8 +87,8 @@ class ViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        captureSession?.stopRunning()
-        captureSession = nil
+        //captureSession?.stopRunning()
+        //captureSession = nil
     }
     
     override func viewDidAppear(_ animated: Bool) {

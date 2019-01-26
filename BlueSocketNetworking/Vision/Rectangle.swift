@@ -11,59 +11,61 @@ import Vision
 
 extension ViewController {
     func rectangleProcessing(filtered: CIImage) {
-        if lastRectObservation == nil {
+        if lastRect1 == nil && lastRect2 == nil {
             //First frame, detect and find rectangle
+            /*let queue = DispatchQueue(label: "por_favor_mantangese_alejado_de_las_puertas")
+            queue.async {
+                print("First frame")
+                
+            }*/
+            
             do {
-                try detectRect(ciImage: filtered)
+                try self.detectRect(ciImage: filtered)
             } catch {
                 print("This is where it failed: \(error)")
             }
         } else {
-            /*
-            let detectionQueue = DispatchQueue(label: "detection")
-            detectionQueue.async {
-                do {
-                    try self.detectRect(ciImage: filtered)
-                } catch {
-                    print("This is where it failed background: \(error)")
-                }
-            }*/
             //Continue tracking
-            let request = VNTrackObjectRequest(detectedObjectObservation: lastMLObservation!)//VNTrackRectangleRequest(rectangleObservation: lastRectObservation!)
-            do {
-                try sequenceRequestHandler.perform([request], on: filtered)
-                guard let results = (request.results as? [VNDetectedObjectObservation])?.sorted(by: { (item1, item2) -> Bool in item1.confidence > item2.confidence }) else { throw Errors.trackingFailed("No results in tracking request.") }
-                guard let detected = results.first else { throw Errors.trackingFailed("No results in tracking request.")}
-                
-                print(detected.confidence)
-                if detected.confidence > confidence {
-                    processMLData(observation: detected)
-                
-                    self.lastMLObservation = detected
-                
-                    trackingDropped = 0
-                } else {
-                    throw Errors.trackingFailed("Result was \(confidence) for confidence and thus below confidence threshold.")
-                }
-            } catch {
-                print("Tracking failed: \(error)")
-                //debugLabel.text = "Tracking failed: \(error)"
-                DispatchQueue.main.async {
-                    self.debugLabel.text = (
-                        self.debugValue.appending(" Frames old: \(self.trackingDropped).")
-                    )
-                }
-                if trackingDropped == Int(defaults.double(forKey: DefaultsMap.frames)) {
-                    //Restart detection
-                    lastMLObservation = nil
-                    trackingDropped = 0
+            //let queue = DispatchQueue(label: "Track_the_blooming_thing")
+            //queue.async {
+                let rect1 = VNTrackRectangleRequest(rectangleObservation: self.lastRect1!)
+                let rect2 = VNTrackRectangleRequest(rectangleObservation: self.lastRect2!)
+                do {
+                    try self.rectangle1Tracker.perform([rect1, rect2], on: filtered)
+                    //try self.rectangle2Tracker.perform([rect2], on: filtered)
+                    let results = (rect1.results as? [VNRectangleObservation] ?? []) + (rect2.results as? [VNRectangleObservation] ?? [])
+                    self.trackRectHandler(results: results)
+                    //if detected.confidence > confidence {
+                    //processMLData(observation: detected)
+                    
+                    //self.lastMLObservation = detected
+                    
+                    self.trackingDropped = 0
+                    //} else {
+                    //    throw Errors.trackingFailed("Result was \(confidence) for confidence and thus below confidence threshold.")
+                    //}
+                } catch {
+                    print("Tracking failed WHY: \(error)")
+                    //debugLabel.text = "Tracking failed: \(error)"
                     DispatchQueue.main.async {
-                        self.debugView.removeRect()
+                        self.debugLabel.text = (
+                            self.debugValue.appending(" Frames old: \(self.trackingDropped).")
+                        )
                     }
-                } else {
-                    trackingDropped += 1
+                    if self.trackingDropped == Int(self.defaults.double(forKey: DefaultsMap.frames)) {
+                        //Restart detection
+                        self.lastRect1 = nil
+                        self.lastRect2 = nil
+                        self.trackingDropped = 0
+                        DispatchQueue.main.async {
+                            self.debugView.removeRect()
+                        }
+                    } else {
+                        self.trackingDropped += 1
+                    }
                 }
-            }
+            //}
+            
         }
     }
     
@@ -88,87 +90,109 @@ extension ViewController {
      The completion handler following the initial detection.
      */
     func detectRectHandler(request: VNRequest, error: Error?) {
-        guard var results = request.results as? [VNRectangleObservation] else {
+        print("Handler")
+        guard let obsresults = request.results as? [VNRectangleObservation] else {
             return
         }
-        
-        // Filter items of too little confidence
-        results = results.filter { (observation) -> Bool in
-            if observation.confidence > confidence {
-                return true
-            } else {
-                return false
+        let queue = DispatchQueue(label: "detect_it")
+        queue.async {
+            if let results = self.detectionHandler(results: obsresults) {
+                // Group of two
+                //DispatchQueue.main.async {
+                print("DETECTED")
+                let observation = groupResults(target1: results[0], target2: results[1])
+                self.lastRect1 = results[0]
+                self.lastRect2 = results[1]
+                //self.lastMLObservation = observation
+                self.processData(observation: observation)
+                //}
             }
         }
         
-        results = results.filter({ (observation) -> Bool in
-            let width = observation.bottomRight.x - observation.bottomLeft.x
-            if width > 0.04 {
-                return true
-            } else {
-                return false
-            }
-        })
-        
-        // Sort remaining by confidence
-        results = results.sorted { (first, next) -> Bool in
-            first.confidence > next.confidence
-        }
-        
-        // Run through sequence of results
-        for (index, result) in results.enumerated() {
-            
-            // IMPORTANT: Coordinate space is (0.0, 0.0) in lower left corner, (1.0, 1.0) in upper right.
-            
-            
-            
-            let height = result.topLeft.y - result.bottomLeft.y
-            //  H2
-            //
-            //
-            //  H1
-            let width = result.topRight.x - result.topLeft.x
-            //  W1       W2
-            //
-            //
-            //
-            
-            let aspectRatio = Float(height / width)
-            
-            print("Detected rect with aspect ratio \(aspectRatio); x: \(result.topLeft.x); y: \(result.topLeft.y); height: \(height); width: \(width)")
-            
-            // Aspect ratio is HEIGHT / WIDTH
-            // 0.35x0.50
-            if aspectRatio >= defaults.float(forKey: DefaultsMap.aspectMin) && aspectRatio <= defaults.float(forKey: DefaultsMap.aspectMax) {
+    }
+    
+    func trackRectHandler(results: [VNRectangleObservation]) {
+        if let results = detectionHandler(results: results) {
+            print("TRACKED")
+            self.lastRect1 = results[0]
+            self.lastRect2 = results[1]
+            let queue = DispatchQueue(label: "processing")
+            queue.async {
+                let observation = groupResults(target1: results[0], target2: results[1])
                 
-                if (index + 1) < results.count{
+                //self.lastMLObservation = observation
+                self.processData(observation: observation)
+            }
+            
+        }
+    }
+    
+    func detectionHandler(results: [VNRectangleObservation]) -> [VNRectangleObservation]? {
+        var results = results
+        if results.count < 2 {
+            print("Not enough :(")
+            return nil
+        } else {
+            // Filter items of too little confidence
+            print("Is enough :)")
+            results = results.filter { (observation) -> Bool in
+                print(observation.confidence)
+                if observation.confidence > confidence {
+                    return true
+                } else {
+                    return false
+                }
+            }
+            
+            results = results.filter({ (observation) -> Bool in
+                let width = observation.bottomRight.x - observation.bottomLeft.x
+                if width > 0.04 {
+                    return true
+                } else {
+                    return false
+                }
+            })
+            
+            // Sort remaining by confidence
+            results = results.sorted { (first, next) -> Bool in
+                first.confidence > next.confidence
+            }
+            
+            // Run through sequence of results
+            for (index, result) in results.enumerated() {
+                
+                // IMPORTANT: Coordinate space is (0.0, 0.0) in lower left corner, (1.0, 1.0) in upper right.
+                
+                
+                
+                let height = result.topLeft.y - result.bottomLeft.y
+                //  H2
+                //
+                //
+                //  H1
+                let width = result.topRight.x - result.topLeft.x
+                //  W1       W2
+                //
+                //
+                //
+                
+                let aspectRatio = Float(height / width)
+                
+                print("Detected rect with aspect ratio \(aspectRatio); x: \(result.topLeft.x); y: \(result.topLeft.y); height: \(height); width: \(width)")
+                
+                // Aspect ratio is HEIGHT / WIDTH
+                // 0.35x0.50
+                //if aspectRatio >= defaults.float(forKey: DefaultsMap.aspectMin) && aspectRatio <= defaults.float(forKey: DefaultsMap.aspectMax) {
+                
+                while (index + 1) < results.count{
                     if isIntersectionAbove(target1: result, target2: results[index+1]) {
-                        // Group of two
-                        DispatchQueue.main.async {
-                            print("HI THERE")
-                            let observation = groupResults(target1: result, target2: results[index+1])
-                            self.rectangle1 = result
-                            self.rectangle2 = results[index+1]
-                            self.lastMLObservation = observation
-                            self.processMLData(observation: observation)
-                        }
-                        
-                        break
+                        return [result, results[index+1]]
                     }
                 }
-                
-                /*
-                self.lastRectObservation = result
-                print("Result points are " + result.topLeft.debugDescription + result.topRight.debugDescription + result.bottomLeft.debugDescription + result.bottomRight.debugDescription)
-                print("Rect found with aspect ratio of \(aspectRatio)")
-                print("Field of View is \(horizontalFoV!) and buffer size is \(pixelBufferSize.height)x\(pixelBufferSize.width)")
-                
-                processData(observation: result)
-                lastRectObservation = result
-                break*/
+                //}
             }
+            return nil
         }
-        
     }
     
     
@@ -196,8 +220,11 @@ extension ViewController {
         let difference = 0.5 - centerRectX
         let angle = difference * CGFloat(horizontalFoV!)
         
-        let heightAspect = observation.topLeft.y - observation.bottomLeft.y
-        let widthAspect = observation.topRight.x - observation.topLeft.x
+        //let heightAspect = observation.topLeft.y - observation.bottomLeft.y
+        //let widthAspect = observation.topRight.x - observation.topLeft.x
+        
+        let heightAspect = observation.boundingBox.height
+        let widthAspect = observation.boundingBox.width
         
         let rect = CGRect(x: observation.topLeft.x, y: observation.topLeft.y, width: widthAspect, height: heightAspect)
         
@@ -209,7 +236,7 @@ extension ViewController {
         
         self.debugValue =
         """
-        topLeft of (\(((observation.topLeft.x * 100).rounded()/100)), \(((observation.topLeft.y * 100).rounded()/100))).
+        topLeft of (\(((observation.boundingBox.minX * 100).rounded()/100)), \(((observation.boundingBox.minY * 100).rounded()/100))).
         Aspect of \((aspectRatio * 1000).rounded()/1000).
         Angle off \((angle * 100).rounded()/100) deg.
         """

@@ -13,7 +13,6 @@ import UIKit
 extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
     
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        
         // Configures the filter based on user defaults.
         // Also, only filtered if camera not updated in past 5 frames.
         let (filtered, size) = sampleBuffer.getFilteredImage(
@@ -38,5 +37,6 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
     
     func captureOutput(_ output: AVCaptureOutput, didDrop sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         //Handle dropped frame
+        print("Dropped")
     }
 }

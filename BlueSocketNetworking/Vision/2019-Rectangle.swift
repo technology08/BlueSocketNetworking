@@ -44,6 +44,9 @@ public func isIntersectionAbove(target1: VNRectangleObservation, target2: VNRect
     let line2 = Line(p1: target2.bottomRight, p2: target2.topRight)
     
     guard let intersectionPoint = line1.intersection(of: line2) else { return false }
+    /////////////////////////////////////////////////////////////////////////
+    /// TODO: MAKE SURE THIS IS GREATER THAN NOT LESS THAN FOR PROPORTIONS///
+    /////////////////////////////////////////////////////////////////////////
     if intersectionPoint.y > target1.topLeft.y && intersectionPoint.y > target2.topLeft.y {
         print(intersectionPoint)
         print("ABOVE")
@@ -54,7 +57,7 @@ public func isIntersectionAbove(target1: VNRectangleObservation, target2: VNRect
     }
 }
 
-public func groupResults(target1: VNRectangleObservation, target2: VNRectangleObservation) -> VNDetectedObjectObservation {
+public func groupResults(target1: VNRectangleObservation, target2: VNRectangleObservation) -> VNRectangleObservation {
     
     var x: CGFloat = 0.0
     var y: CGFloat = 0.0
@@ -77,7 +80,7 @@ public func groupResults(target1: VNRectangleObservation, target2: VNRectangleOb
     
     let combinedRect = CGRect(x: x, y: y, width: width, height: height)
     
-    let observation = VNDetectedObjectObservation(boundingBox: combinedRect)
+    let observation = VNRectangleObservation(boundingBox: combinedRect)
     return observation
 }
 
