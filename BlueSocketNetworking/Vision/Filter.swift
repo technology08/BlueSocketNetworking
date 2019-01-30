@@ -39,7 +39,22 @@ extension CIImage {
         }
         """
         
-        guard let kernel = CIColorKernel(source: kernelString) else { return nil }
+        let dansKernelString =
+        """
+        kernel vec4 thresholdFilter(__sample textureColor, float redMin, float redMax, float greenMin, float greenMax, float blueMin, float blueMax) {
+
+            textureColor.rgb = vec3(0.0, textureColor.g, 0.0);
+            if (textureColor.g < greenMin) {
+                textureColor.rgb = vec3(0.0, 0.0, 0.0);
+            } else {
+                textureColor.rgb = vec3(1.0, 1.0, 1.0);
+            }
+
+            return textureColor;
+        }
+        """
+        
+        guard let kernel = CIColorKernel(source: dansKernelString) else { return nil }
         let filtered = kernel.apply(extent: self.extent, arguments: [self, redMin, redMax, greenMin, greenMax, blueMin, blueMax])
         return filtered
         

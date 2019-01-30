@@ -148,9 +148,12 @@ extension ViewController {
             }
         } else {
             //Continue tracking
+            if sequenceRequestHandler == nil {
+                sequenceRequestHandler = VNSequenceRequestHandler()
+            }
             let request = VNTrackObjectRequest(detectedObjectObservation: self.lastMLObservation!)
             do {
-                try sequenceRequestHandler.perform([request], on: filtered)
+                try sequenceRequestHandler!.perform([request], on: filtered)
                 guard let results = (request.results as? [VNDetectedObjectObservation])?.sorted(by: { (item1, item2) -> Bool in item1.confidence > item2.confidence }) else { throw Errors.trackingFailed("No results in tracking request.") }
                 guard let detected = results.first else { throw Errors.trackingFailed("No results in tracking request.")}
                 print(detected.confidence)
@@ -176,6 +179,7 @@ extension ViewController {
                 if trackingDropped == Int(defaults.double(forKey: DefaultsMap.frames)) {
                     //Restart detection
                     lastMLObservation = nil
+                    sequenceRequestHandler = nil
                     trackingDropped = 0
                     DispatchQueue.main.async {
                         self.debugView.removeRect()

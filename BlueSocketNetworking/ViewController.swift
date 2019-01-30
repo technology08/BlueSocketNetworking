@@ -29,7 +29,7 @@ class ViewController: UIViewController {
     ///The server used for communicating with the robot.
     var server: EchoServer?
     
-    var sequenceRequestHandler = VNSequenceRequestHandler()
+    var sequenceRequestHandler: VNSequenceRequestHandler? = nil
     ///The last observation to be passed into the tracking request.
     var lastRectObservation: VNRectangleObservation? = nil
     
@@ -47,8 +47,8 @@ class ViewController: UIViewController {
     
     var lastRect1: VNRectangleObservation? = nil
     var lastRect2: VNRectangleObservation? = nil
-    var rectangle1Tracker = VNSequenceRequestHandler()
-    var rectangle2Tracker = VNSequenceRequestHandler()
+    var rectangle1Tracker: VNSequenceRequestHandler? = nil
+    var rectangle2Tracker: VNSequenceRequestHandler? = nil
         
     var debugValue = "No rectangle detected."
     
@@ -90,16 +90,6 @@ class ViewController: UIViewController {
         //captureSession?.stopRunning()
         //captureSession = nil
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        //let qos = DispatchQueue(label: "server")
-        //qos.async {
-        
-        //}
-        
-    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -126,5 +116,11 @@ class ViewController: UIViewController {
         super.viewDidDisappear(animated)
         
         defaults.set(confidence, forKey: DefaultsMap.confidence)
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        
+        try! setupCamera()
     }
 }
