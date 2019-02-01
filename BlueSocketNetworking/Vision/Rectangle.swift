@@ -177,11 +177,47 @@ extension ViewController {
             })
             
             // Sort remaining by confidence
-            results = results.sorted { (first, next) -> Bool in
-                first.confidence > next.confidence
+            //results = results.sorted { (first, next) -> Bool in
+            //    first.confidence > next.confidence
+            //}
+            
+            var leftResults: [VNRectangleObservation] = []
+            var rightResults: [VNRectangleObservation] = []
+            
+            for observation in results {
+                if observation.bottomLeft.x < observation.topLeft.x {
+                    leftResults.append(observation)
+                } else if observation.bottomLeft.x > observation.topLeft.x {
+                    rightResults.append(observation)
+                }
             }
             
+            leftResults = leftResults.sorted { (first, next) -> Bool in
+                first.bottomLeft.x < next.topLeft.x
+            }
+            
+            rightResults = rightResults.sorted { (first, next) -> Bool in
+                first.bottomLeft.x < next.topLeft.x
+            }
+            
+            guard let leftOne = leftResults.first else { return nil }// Hardcoded for now, please change
+            var rightOne: VNRectangleObservation!
+            for right in rightResults {
+                if right.bottomLeft.x > leftOne.bottomRight.x {
+                    rightOne = right
+                    break
+                }
+            }
+            
+            guard rightOne != nil else { return nil }
+            if isIntersectionAbove(target1: leftOne, target2: rightOne) {
+                return [leftOne, rightOne]
+            }
+            
+            // TODO: Sort left to right
+            
             // Run through sequence of results
+            /*
             for (index, result) in results.enumerated() {
                 
                 // IMPORTANT: Coordinate space is (0.0, 0.0) in lower left corner, (1.0, 1.0) in upper right.
@@ -219,7 +255,7 @@ extension ViewController {
 //                    }
 //                }
                 //}
-            }
+            }*/
             return nil
         }
     }
