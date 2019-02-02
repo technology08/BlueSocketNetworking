@@ -21,7 +21,7 @@ extension ViewController {
         do {
             try handler.perform([objectRecognition])
         } catch {
-            print(error)
+            //print(error)
         }
     }
     
@@ -67,7 +67,7 @@ extension ViewController {
                 
                 // Aspect ratio is HEIGHT / WIDTH
                 // 0.35x0.50
-                print(boundingBox)
+                //print(boundingBox)
                 self.lastMLObservation = VNDetectedObjectObservation(boundingBox: boundingBox)
                 print("Dimensions are " + String(describing: boundingBox.minX) + String(describing: boundingBox.minY) + String(describing: boundingBox.width) + String(describing: boundingBox.height))
                 print("Field of View is \(horizontalFoV!) and buffer size is \(pixelBufferSize.height)x\(pixelBufferSize.width)")

@@ -47,7 +47,7 @@ struct RectangleData: Codable {
     public func getPipeString() -> String {
         switch detected {
         case true:
-            return "degrees: \(self.degrees) | time: \(self.timestamp!) | detected: \(self.detected)"
+            return "inFov:\(self.detected)|angle1:\(self.degrees)|distance:\(self.distance)|time: \(self.timestamp!)"
         case false:
             return "detected: \(self.detected)"
         }
@@ -55,5 +55,3 @@ struct RectangleData: Codable {
     }
     
 }
-
-//height^3 + height^2 + height + connstant

@@ -104,9 +104,9 @@ public func isIntersectionAbove(target1: VNRectangleObservation, target2: VNRect
         /// TODO: MAKE SURE THIS IS GREATER THAN NOT LESS THAN FOR PROPORTIONS///
         /////////////////////////////////////////////////////////////////////////
         if intersectionPoint.y < target1.topLeft.y && intersectionPoint.y < target2.topLeft.y {
-            print(intersectionPoint)
-            print("ABOVE")
-            print(target1.topLeft)
+//            print(intersectionPoint)
+//            print("ABOVE")
+//            print(target1.topLeft)
             return true
         } else {
             return false
@@ -136,9 +136,7 @@ public func groupResults(target1: VNRectangleObservation, target2: VNRectangleOb
     height = allY.max()! - allY.min()!
     
     let combinedRect = CGRect(x: x, y: y, width: width, height: height)
-    print(combinedRect)
-    //let observation = VNRectangleObservation(boundingBox: combinedRect)
+    //print(combinedRect)
     return combinedRect
 }
 
-// NEXT STEPS: Try two TrackRectangles algorithms simultaneously, where we can get the center from those.

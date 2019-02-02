@@ -22,15 +22,15 @@ class DebugView: UIView {
         DispatchQueue.main.async {
             if self.debugRect == nil {
                 // Create RectView
-                print("Frame is ")
-                print(unnormalized)
+//                print("Frame is ")
+//                print(unnormalized)
                 self.debugRect = UIView(frame: unnormalized)
                 self.debugRect?.layer.borderColor = UIColor.red.cgColor
                 self.debugRect?.layer.borderWidth = 5.0
                 self.addSubview(self.debugRect!)
             } else {
-                print("Frame is ")
-                print(unnormalized)
+//                print("Frame is ")
+//                print(unnormalized)
                 self.debugRect!.frame = unnormalized
             }
         }

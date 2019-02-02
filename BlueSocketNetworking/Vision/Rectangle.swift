@@ -13,21 +13,13 @@ extension ViewController {
     func rectangleProcessing(filtered: CIImage) {
         if lastRect1 == nil && lastRect2 == nil {
             //First frame, detect and find rectangle
-            /*let queue = DispatchQueue(label: "por_favor_mantangese_alejado_de_las_puertas")
-             queue.async {
-             print("First frame")
-             
-             }*/
-            
             do {
                 try self.detectRect(ciImage: filtered)
             } catch {
-                print("This is where it failed: \(error)")
+                //print("This is where it failed: \(error)")
             }
         } else {
             //Continue tracking
-            //let queue = DispatchQueue(label: "Track_the_blooming_thing")
-            //queue.async {
             if self.rectangle1Tracker == nil {
                 self.rectangle1Tracker = VNSequenceRequestHandler()
             }
@@ -44,20 +36,11 @@ extension ViewController {
                 try self.rectangle1Tracker!.perform([rect1], on: filtered)
                 try self.rectangle2Tracker!.perform([rect2], on: filtered)
                 
-                //try self.rectangle2Tracker.perform([rect2], on: filtered)
                 let results = (rect1.results as? [VNRectangleObservation] ?? []) + (rect2.results as? [VNRectangleObservation] ?? [])
                 self.trackRectHandler(results: results)
-                //if detected.confidence > confidence {
-                //processMLData(observation: detected)
-                
-                //self.lastMLObservation = detected
-                
                 self.trackingDropped = 0
-                //} else {
-                //    throw Errors.trackingFailed("Result was \(confidence) for confidence and thus below confidence threshold.")
-                //}
             } catch {
-                print("Tracking failed WHY: \(error)")
+                //print("Tracking failed WHY: \(error)")
                 //debugLabel.text = "Tracking failed: \(error)"
                 DispatchQueue.main.async {
                     self.debugLabel.text = (
@@ -78,8 +61,6 @@ extension ViewController {
                     self.trackingDropped += 1
                 }
             }
-            //}
-            
         }
     }
     
@@ -103,11 +84,8 @@ extension ViewController {
             let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
             
             try handler.perform([request])
-            print(request.results!)
+            //print(request.results!)
         }
-        
-        
-        
     }
     
     /**
@@ -122,44 +100,37 @@ extension ViewController {
         //queue.async {
         if let results = self.detectionHandler(results: obsresults) {
             // Group of two
-            //DispatchQueue.main.async {
-            print("DETECTED")
+            
+            //print("DETECTED")
             let observation = groupResults(target1: results[0], target2: results[1])
             self.lastRect1 = results[0]
             self.lastRect2 = results[1]
-            //self.lastMLObservation = observation
+            
             self.processData(observation: observation)
-            //}
         }
-        //}
     }
     
     func trackRectHandler(results: [VNRectangleObservation]) {
         if let results = detectionHandler(results: results) {
-            print("TRACKED")
             self.lastRect1 = results[0]
             self.lastRect2 = results[1]
-            //let queue = DispatchQueue(label: "processing")
-            //queue.async {
+            
             let observation = groupResults(target1: results[0], target2: results[1])
             
-            //self.lastMLObservation = observation
             self.processData(observation: observation)
-            //}
-            
         }
     }
     
     func detectionHandler(results: [VNRectangleObservation]) -> [VNRectangleObservation]? {
         var results = results
         if results.count < 2 {
-            print("Not enough :(: \(results.count)")
+            //print("Not enough :(: \(results.count)")
             return nil
         } else {
             // Filter items of too little confidence
-            print("Is enough :)")
+            //print("Is enough :)")
             results = results.filter { (observation) -> Bool in
-                print(observation.confidence)
+                //print(observation.confidence)
                 if observation.confidence > confidence {
                     return true
                 } else {
@@ -214,48 +185,6 @@ extension ViewController {
                 return [leftOne, rightOne]
             }
             
-            // TODO: Sort left to right
-            
-            // Run through sequence of results
-            /*
-            for (index, result) in results.enumerated() {
-                
-                // IMPORTANT: Coordinate space is (0.0, 0.0) in lower left corner, (1.0, 1.0) in upper right.
-                
-                
-                
-                let height = result.topLeft.y - result.bottomLeft.y
-                //  H2
-                //
-                //
-                //  H1
-                let width = result.topRight.x - result.topLeft.x
-                //  W1       W2
-                //
-                //
-                //
-                
-                let aspectRatio = Float(height / width)
-                
-                //print("Detected rect with aspect ratio \(aspectRatio); x: \(result.topLeft.x); y: \(result.topLeft.y); height: \(height); width: \(width)")
-                
-                // Aspect ratio is HEIGHT / WIDTH
-                // 0.35x0.50
-                //if aspectRatio >= defaults.float(forKey: DefaultsMap.aspectMin) && aspectRatio <= defaults.float(forKey: DefaultsMap.aspectMax) {
-                for count in 1...results.count {
-                    if index + count < results.count {
-                        if isIntersectionAbove(target1: result, target2: results[index+1]) {
-                            return [result, results[index+1]]
-                        }
-                    }
-                }
-//                while (index + 1) < results.count{
-//                    if isIntersectionAbove(target1: result, target2: results[index+1]) {
-//                        return [result, results[index+1]]
-//                    }
-//                }
-                //}
-            }*/
             return nil
         }
     }
@@ -277,21 +206,21 @@ extension ViewController {
         
         // IMPORTANT: Coordinate space is (0.0, 0.0) in lower left corner, (1.0, 1.0) in upper right.
         
-        // Divide Width / 2
-        let width = observation.width
-        // Get the center of the rectangle's width
-        let centerRectX = width / 2
+        let centerRectX = observation.midX
+        
         // Difference to center of the view (0.5)
         let difference = 0.5 - centerRectX
         let angle = difference * CGFloat(horizontalFoV!)
         
-        //let heightAspect = observation.topLeft.y - observation.bottomLeft.y
-        //let widthAspect = observation.topRight.x - observation.topLeft.x
+        let height = observation.height
+        let width  = observation.width
         
-        let heightAspect = observation.height
-        let widthAspect = observation.width
-        
-        let aspectRatio = Float(heightAspect / widthAspect)
+        let area = (height * pixelBufferSize.height) * (width * pixelBufferSize.width)
+        print("Area is \(area)")
+        print(width)
+        let viewArea = pixelBufferSize.height * pixelBufferSize.width
+        print("View area is \(viewArea)")
+        let percentArea = area / viewArea
         
         DispatchQueue.main.async {
             self.debugView.drawRect(boundingBox: observation, size: self.previewImageView.frame.size)
@@ -300,7 +229,7 @@ extension ViewController {
         self.debugValue =
         """
         topLeft of (\(((observation.minX * 100).rounded()/100)), \(((observation.minY * 100).rounded()/100))).
-        Aspect of \((aspectRatio * 1000).rounded()/1000).
+        Area % of \((percentArea * 100000).rounded()/1000).
         Angle off \((angle * 100).rounded()/100) deg.
         """
         
@@ -312,7 +241,7 @@ extension ViewController {
         
         let dateString = Formatter.iso8601.string(from: Date())
         
-        server?.setVisionData(data: RectangleData(degreesOfDifference: angle, date: dateString, height: 0))
+        server?.setVisionData(data: RectangleData(degreesOfDifference: angle, date: dateString, height: percentArea))
         
     }
 }
