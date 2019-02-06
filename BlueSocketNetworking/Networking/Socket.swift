@@ -33,7 +33,7 @@ class EchoServer {
     
     /**
      Closes the socket and shuts down the server.
- */
+     */
     deinit {
         // Close all open sockets...
         for socket in connectedSockets.values {
@@ -45,7 +45,7 @@ class EchoServer {
     /**
      Multi-threaded locking way of the robot fetching the current vision data.
      - Returns: Current `RectangleData` object.
- */
+     */
     public func getVisionData() -> RectangleData? {
         var returnthing: RectangleData? = nil
         lock(obj: visionData as AnyObject) {
@@ -58,7 +58,7 @@ class EchoServer {
      Update the current vision data from the processing thread.
      
      - Parameter data: The most recent data to add to the server.
- */
+     */
     
     public func setVisionData(data: RectangleData) {
         lock(obj: visionData as AnyObject) {
@@ -68,7 +68,7 @@ class EchoServer {
     
     /**
      Fires up the server and opens a socket.
- */
+     */
     
     func runClient() {
         
@@ -118,12 +118,13 @@ class EchoServer {
     }
     
     private func addNewConnection(socket: Socket) {
-        
+        print(socket)
         // Add the new socket to the list of connected sockets...
         socketLockQueue.sync { [unowned self, socket] in
             self.connectedSockets[socket.socketfd] = socket
         }
-        
+        print("QUEUE")
+        print(self.connectedSockets[socket.socketfd])
         // Get the global concurrent queue...
         let queue = DispatchQueue.global(qos: .default)
         
@@ -132,22 +133,27 @@ class EchoServer {
             
             var shouldKeepRunning = true
             
-            var readData = Data(capacity: EchoServer.bufferSize)
+            //var readData = Data(capacity: EchoServer.bufferSize)
+            //print(readData)
             
             do {
                 // Write the welcome string...
                 //try socket.write(from: "Hello, type 'QUIT' to end session\nor 'SHUTDOWN' to stop server.\n")
-                
-                repeat {
-                    let bytesRead = try socket.read(into: &readData)
-                    
-                    if bytesRead > 0 {
-                        guard let request = String(data: readData, encoding: .utf8) else {
-                            
-                            print("Error decoding response...")
-                            readData.count = 0
-                            break
-                        }
+                //let string = try socket.readString()
+                //print("String" + string!)
+                while shouldKeepRunning {
+                    //let bytesRead = try socket.read(into: &readData)
+                    let string = try socket.readString()
+
+                    print("String" + string!)
+                    if string != nil {
+                        /*guard let request = String(data: readData, encoding: .utf8) else {
+                         
+                         print("Error decoding response...")
+                         readData.count = 0
+                         break
+                         }*/
+                        guard let request = string else { return }
                         if request.hasPrefix(EchoServer.shutdownCommand) {
                             
                             print("Shutdown requested by connection at \(socket.remoteHostname):\(socket.remotePort)")
@@ -158,34 +164,38 @@ class EchoServer {
                             return
                         }
                         print("Server received from connection at \(socket.remoteHostname):\(socket.remotePort): \(request) ")
-                        
-                        if request == "VISION" {
+                        print(request + "this is the end")
+                        if request.starts(with: "VISION") {
                             //self.visionData.randomize()
-                            let json = try JSONEncoder().encode(self.getVisionData()!)
-                            guard let string = String(data: json, encoding: String.Encoding.utf8) else {
-                                
-                                print("String couldn't be created")
-                                return
-                                
+                            print("POR FAVOR MANTANGESE ALJEADO DE LAS PUERTAS")
+                            DispatchQueue.main.async {
+                                let string = self.getVisionData()!.getPipeString()
+                                print(string)
+                                do {
+                                    try socket.write(from: string)
+                                    print("WE ARE THE CHAMPIONS MY FRIENDS")
+                                    print("AND WE'LL")
+                                    print("KEEP ON FIGHTING")
+                                    print("TO THE END")
+                                } catch {
+                                    print(error)
+                                }
                             }
-                            let reply = string
-                            try socket.write(from: reply)
+                            
                         } else if request.hasPrefix(EchoServer.quitCommand) || request.hasSuffix(EchoServer.quitCommand) {
                             
                             shouldKeepRunning = false
                         }
                         
-                    }
-                    
-                    if bytesRead == 0 {
+                    } else {
                         
                         shouldKeepRunning = false
                         break
                     }
                     
-                    readData.count = 0
+                    //readData.count = 0
                     
-                } while shouldKeepRunning
+                }
                 
                 print("Socket: \(socket.remoteHostname):\(socket.remotePort) closed...")
                 socket.close()
@@ -194,8 +204,7 @@ class EchoServer {
                     self.connectedSockets[socket.socketfd] = nil
                 }
                 
-            }
-            catch let error {
+            } catch let error {
                 guard let socketError = error as? Socket.Error else {
                     print("Unexpected error by connection at \(socket.remoteHostname):\(socket.remotePort)...")
                     return

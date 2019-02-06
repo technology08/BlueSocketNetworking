@@ -58,15 +58,16 @@ extension ViewController {
         
         // Orients video
         let connection = cameraOutput.connection(with: .video)
-        print(UIDevice.current.orientation)
-        switch UIDevice.current.orientation {
+        //print(UIDevice.current.orientation)
+        /*switch UIDevice.current.orientation {
         case .landscapeLeft:
             connection?.videoOrientation = .landscapeLeft
         case .landscapeRight:
             connection?.videoOrientation = .landscapeRight
         default:
             connection?.videoOrientation = .portrait
-        }
+        }*/
+        connection?.videoOrientation = .landscapeLeft
         captureSession?.startRunning()
     }
     /**

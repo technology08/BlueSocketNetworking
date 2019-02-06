@@ -37,6 +37,6 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
     
     func captureOutput(_ output: AVCaptureOutput, didDrop sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         //Handle dropped frame
-        print("Dropped")
+        //print("Dropped")
     }
 }

@@ -117,10 +117,10 @@ class ViewController: UIViewController {
         
         defaults.set(confidence, forKey: DefaultsMap.confidence)
     }
-    
+    /*
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         
         try! setupCamera()
-    }
+    }*/
 }

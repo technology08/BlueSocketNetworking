@@ -7,13 +7,14 @@
 //
 
 import CoreGraphics
+import Foundation
 
 struct RectangleData: Codable {
     
     ///The difference between the center of the FoV and the rectangle's center
     private var degrees: Float = 0.0
     ///The timestamp given in ISO 8061 format: "YYYY-MM-DD HH:MM:SS +0000\n"
-    private var timestamp: String? = nil
+    private var timestamp: String = Formatter.iso8601.string(from: Date())
     ///The approximate distance given in inches.
     private var distance: Float = 0.0
     ///Whether a rectangle has been detected.
@@ -45,13 +46,7 @@ struct RectangleData: Codable {
     
     // PIPE LIMITED STRING
     public func getPipeString() -> String {
-        switch detected {
-        case true:
-            return "inFov:\(self.detected)|angle1:\(self.degrees)|distance:\(self.distance)|time: \(self.timestamp!)"
-        case false:
-            return "detected: \(self.detected)"
-        }
-        
+        return "inFov^\(self.detected)|angle1^\(self.degrees)|distance^\(self.distance)|time^\(self.timestamp)\n"
     }
     
 }

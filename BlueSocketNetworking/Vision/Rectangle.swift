@@ -75,7 +75,8 @@ extension ViewController {
         request.maximumObservations = 6
         
         request.minimumConfidence = confidence
-        request.minimumSize = 0.02
+        request.minimumSize = 0.005
+        //request.minimumSize = 0.02
         request.minimumAspectRatio = 0
         request.maximumAspectRatio = 50
         
@@ -138,14 +139,32 @@ extension ViewController {
                 }
             }
             
-            results = results.filter({ (observation) -> Bool in
+            var heights: [CGFloat] = []
+            
+            for result in results {
+                heights.append(result.bottomLeft.x - result.topLeft.x)
+            }
+            
+            if let maxHeight = heights.max() {
+                results = results.filter { (observation) -> Bool in
+                    let height = observation.bottomLeft.x - observation.topLeft.x
+                    if abs(height / maxHeight) > 0.8 {
+                        return true
+                    } else {
+                        return false
+                    }
+                }
+            }
+            
+          
+            /*results = results.filter({ (observation) -> Bool in
                 let width = observation.bottomRight.x - observation.bottomLeft.x
                 if width > 0.04 {
                     return true
                 } else {
                     return false
                 }
-            })
+            })*/
             
             // Sort remaining by confidence
             //results = results.sorted { (first, next) -> Bool in
@@ -216,21 +235,25 @@ extension ViewController {
         let width  = observation.width
         
         let area = (height * pixelBufferSize.height) * (width * pixelBufferSize.width)
-        print("Area is \(area)")
-        print(width)
+        //print("Area is \(area)")
+        //print(width)
         let viewArea = pixelBufferSize.height * pixelBufferSize.width
-        print("View area is \(viewArea)")
+        //print("View area is \(viewArea)")
         let percentArea = area / viewArea
         
         DispatchQueue.main.async {
             self.debugView.drawRect(boundingBox: observation, size: self.previewImageView.frame.size)
         }
         
+        let scaledArea = (percentArea * 100000).rounded()/1000
+        
+        let distance = 121.94 * (powf(Float(scaledArea), -0.582))
+        
         self.debugValue =
         """
         topLeft of (\(((observation.minX * 100).rounded()/100)), \(((observation.minY * 100).rounded()/100))).
-        Area % of \((percentArea * 100000).rounded()/1000).
-        Angle off \((angle * 100).rounded()/100) deg.
+        % Area \((percentArea * 100000).rounded()/1000). Distance of \((distance * 100).rounded()/100)
+        Angle: \((angle * 100).rounded()/100) deg.
         """
         
         DispatchQueue.main.async {
@@ -241,7 +264,7 @@ extension ViewController {
         
         let dateString = Formatter.iso8601.string(from: Date())
         
-        server?.setVisionData(data: RectangleData(degreesOfDifference: angle, date: dateString, height: percentArea))
+        server?.setVisionData(data: RectangleData(degreesOfDifference: angle, date: dateString, height: CGFloat(distance)))
         
     }
 }
