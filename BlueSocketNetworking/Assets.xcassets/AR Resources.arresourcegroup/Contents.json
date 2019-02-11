@@ -5,16 +5,7 @@
   },
   "resources" : [
     {
-      "filename" : "Both Strips.arreferenceimage"
-    },
-    {
-      "filename" : "Bottom Strip.arreferenceimage"
-    },
-    {
-      "filename" : "Entire Target.arreferenceimage"
-    },
-    {
-      "filename" : "TopStrip.arreferenceimage"
+      "filename" : "empty-hatch.arreferenceimage"
     }
   ]
 }

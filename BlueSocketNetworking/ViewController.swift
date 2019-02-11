@@ -37,6 +37,8 @@ class ViewController: UIViewController {
     ///The size in pixels of the pixel buffer.
     var pixelBufferSize = CGSize(width: 0, height: 0)
     
+    var trackedNode: SCNNode? = nil
+    
     ///The current data ready to be fetched by the server.
     //var currentData = RectangleData() 
     
@@ -63,6 +65,8 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     
     }
+    
+    
     /**
      Creates a server running of a TCP socket through a port.
      * Using an Lightning to USB 3 camera adapter, connect a USB to Ethernet adapter and an Ethernet cable to the robot radio. In Settings -> Ethernet, configure IP to be `10.40.28.6`. Then connect to the specified port through the radio, and send the word "VISION" on a loop.

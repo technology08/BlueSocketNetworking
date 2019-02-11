@@ -7,14 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		24B6656F5497464E60AADCA28936F71B /* SocketUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD2098B3B93B0F8E0E06979EC34A9549 /* SocketUtils.swift */; };
+		24B6656F5497464E60AADCA28936F71B /* SocketUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBFA77A5FABE74663EEC0DA35C518FD1 /* SocketUtils.swift */; };
 		26310021B3862A8B08438572300DF91C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A16F4CFC63FAC439D7A04994F579A03 /* Foundation.framework */; };
-		2E1A2D967C45F640F5DE6BC8AEDB69DB /* Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6562261560837C07A784DA6845BE54BC /* Socket.swift */; };
+		2E1A2D967C45F640F5DE6BC8AEDB69DB /* Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E3E52EDED6F843ADAC33A207A34C5C /* Socket.swift */; };
 		4B9F4540CB0CD41F4D453E451EEE6301 /* Pods-BlueSocketNetworking-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E4B003222389AD05B7AF2C41DD25716 /* Pods-BlueSocketNetworking-dummy.m */; };
-		5EE2228BBAB5622594FE123098054E99 /* SocketProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D4AF839A05D4112B67712FACD60634 /* SocketProtocols.swift */; };
-		70119679E2ECF3FA522075C2050D96F3 /* BlueSocket-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 8D0B63CF6C3A0CD57AB6CD3FD5A497D3 /* BlueSocket-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5EE2228BBAB5622594FE123098054E99 /* SocketProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10751A3F3870DCA759F0804326BE253F /* SocketProtocols.swift */; };
+		70119679E2ECF3FA522075C2050D96F3 /* BlueSocket-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 11CB4E7265A0CF0F9E8BEBAD2913FB7D /* BlueSocket-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		799B76225B164138C4AC9676AEC817A1 /* Pods-BlueSocketNetworking-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = C64EE9993C0C9B497EC38D86BF29396C /* Pods-BlueSocketNetworking-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		816BA5B8B6767F81C3934B661E1071AC /* BlueSocket-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 491AA418C21B63A8811D56C671966E73 /* BlueSocket-dummy.m */; };
+		816BA5B8B6767F81C3934B661E1071AC /* BlueSocket-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B0EA4069418E82D1DF81E31DFAF9AE8 /* BlueSocket-dummy.m */; };
 		A149C1F732B47B4DEAED07D4D04237C6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A16F4CFC63FAC439D7A04994F579A03 /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
@@ -29,30 +29,29 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		10751A3F3870DCA759F0804326BE253F /* SocketProtocols.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SocketProtocols.swift; path = Sources/Socket/SocketProtocols.swift; sourceTree = "<group>"; };
 		10FF24036BD5FDD8AE669FC6C138B6A4 /* Pods-BlueSocketNetworking-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-BlueSocketNetworking-acknowledgements.plist"; sourceTree = "<group>"; };
-		17D4AF839A05D4112B67712FACD60634 /* SocketProtocols.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SocketProtocols.swift; path = Sources/Socket/SocketProtocols.swift; sourceTree = "<group>"; };
+		11CB4E7265A0CF0F9E8BEBAD2913FB7D /* BlueSocket-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "BlueSocket-umbrella.h"; sourceTree = "<group>"; };
 		1A78C77EDED1F2B91649F431B6696D2A /* Pods-BlueSocketNetworking.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-BlueSocketNetworking.debug.xcconfig"; sourceTree = "<group>"; };
 		20FDB0746045DDC36ED6D1D6C340A8F2 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		277440F4B20158D6D8DE1F3F376E89A4 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
-		391B688CE9EA781B4E21CED363ED3D2A /* BlueSocket-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "BlueSocket-prefix.pch"; sourceTree = "<group>"; };
+		2FE922616F12CC8A7BEB6F5A18E02EF5 /* BlueSocket.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = BlueSocket.xcconfig; sourceTree = "<group>"; };
 		3E4B003222389AD05B7AF2C41DD25716 /* Pods-BlueSocketNetworking-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-BlueSocketNetworking-dummy.m"; sourceTree = "<group>"; };
-		491AA418C21B63A8811D56C671966E73 /* BlueSocket-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "BlueSocket-dummy.m"; sourceTree = "<group>"; };
+		454B72D8A84DB197C79ADBC0B3B5129D /* BlueSocket.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = BlueSocket.modulemap; sourceTree = "<group>"; };
 		5A16F4CFC63FAC439D7A04994F579A03 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		635286E800E0193BCEE62BC360DF2B8F /* Socket.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Socket.framework; path = BlueSocket.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		6562261560837C07A784DA6845BE54BC /* Socket.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Socket.swift; path = Sources/Socket/Socket.swift; sourceTree = "<group>"; };
+		6B0EA4069418E82D1DF81E31DFAF9AE8 /* BlueSocket-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "BlueSocket-dummy.m"; sourceTree = "<group>"; };
 		73E89C32B854B5EC4C16F0CCFDFF1816 /* Pods-BlueSocketNetworking-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-BlueSocketNetworking-frameworks.sh"; sourceTree = "<group>"; };
-		8D0B63CF6C3A0CD57AB6CD3FD5A497D3 /* BlueSocket-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "BlueSocket-umbrella.h"; sourceTree = "<group>"; };
+		81DBCD7524216F275C99631FD4104B8D /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8F530E5B948EB5684F495BCD9D3F63A1 /* Pods_BlueSocketNetworking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_BlueSocketNetworking.framework; path = "Pods-BlueSocketNetworking.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		9AABE7DF9BCB0B6B04014FD7588BC10A /* BlueSocket.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = BlueSocket.xcconfig; sourceTree = "<group>"; };
 		A64789028C82D7D1A8B9B57BECE05A16 /* Pods-BlueSocketNetworking-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-BlueSocketNetworking-acknowledgements.markdown"; sourceTree = "<group>"; };
 		ADC0BDEA16741C50C98F156C929453AB /* Pods-BlueSocketNetworking.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-BlueSocketNetworking.release.xcconfig"; sourceTree = "<group>"; };
+		B9E3E52EDED6F843ADAC33A207A34C5C /* Socket.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Socket.swift; path = Sources/Socket/Socket.swift; sourceTree = "<group>"; };
+		BBFA77A5FABE74663EEC0DA35C518FD1 /* SocketUtils.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SocketUtils.swift; path = Sources/Socket/SocketUtils.swift; sourceTree = "<group>"; };
 		BD21081D6D2AD67B099FF68F8C31A84D /* Pods-BlueSocketNetworking-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-BlueSocketNetworking-resources.sh"; sourceTree = "<group>"; };
-		BFFB046AFAF39755BAB911B4FA822EF2 /* BlueSocket.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = BlueSocket.modulemap; sourceTree = "<group>"; };
 		C64EE9993C0C9B497EC38D86BF29396C /* Pods-BlueSocketNetworking-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-BlueSocketNetworking-umbrella.h"; sourceTree = "<group>"; };
 		D1F73727F15B5E5F1B0147E8110EF858 /* Pods-BlueSocketNetworking.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-BlueSocketNetworking.modulemap"; sourceTree = "<group>"; };
-		F2FAC6C844FA7AFF18713D749B1B5935 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		FD2098B3B93B0F8E0E06979EC34A9549 /* SocketUtils.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SocketUtils.swift; path = Sources/Socket/SocketUtils.swift; sourceTree = "<group>"; };
+		ED37FE613BF1957A42AD435BA8BDAF54 /* BlueSocket-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "BlueSocket-prefix.pch"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,27 +74,12 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		029FDE51BFDD299E3E4D7A335E39234D /* OpenCV */ = {
+		05FF2FAF502886FEAD4FCF31453F2322 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				6BC44D441E998D61DD833005BE840142 /* Frameworks */,
+				ABBA672A17A3754E3EEE683E3A461BB3 /* BlueSocket */,
 			);
-			name = OpenCV;
-			path = OpenCV;
-			sourceTree = "<group>";
-		};
-		374CBF51E9BA15D1271388416D25BC3F /* Support Files */ = {
-			isa = PBXGroup;
-			children = (
-				BFFB046AFAF39755BAB911B4FA822EF2 /* BlueSocket.modulemap */,
-				9AABE7DF9BCB0B6B04014FD7588BC10A /* BlueSocket.xcconfig */,
-				491AA418C21B63A8811D56C671966E73 /* BlueSocket-dummy.m */,
-				391B688CE9EA781B4E21CED363ED3D2A /* BlueSocket-prefix.pch */,
-				8D0B63CF6C3A0CD57AB6CD3FD5A497D3 /* BlueSocket-umbrella.h */,
-				F2FAC6C844FA7AFF18713D749B1B5935 /* Info.plist */,
-			);
-			name = "Support Files";
-			path = "../Target Support Files/BlueSocket";
+			name = Pods;
 			sourceTree = "<group>";
 		};
 		5633970AA283F7D8667DCDC72E12F7A9 /* Products */ = {
@@ -115,12 +99,18 @@
 			name = iOS;
 			sourceTree = "<group>";
 		};
-		6BC44D441E998D61DD833005BE840142 /* Frameworks */ = {
+		79725BD3D70A569F06C41F668553BE84 /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
-				277440F4B20158D6D8DE1F3F376E89A4 /* opencv2.framework */,
+				454B72D8A84DB197C79ADBC0B3B5129D /* BlueSocket.modulemap */,
+				2FE922616F12CC8A7BEB6F5A18E02EF5 /* BlueSocket.xcconfig */,
+				6B0EA4069418E82D1DF81E31DFAF9AE8 /* BlueSocket-dummy.m */,
+				ED37FE613BF1957A42AD435BA8BDAF54 /* BlueSocket-prefix.pch */,
+				11CB4E7265A0CF0F9E8BEBAD2913FB7D /* BlueSocket-umbrella.h */,
+				81DBCD7524216F275C99631FD4104B8D /* Info.plist */,
 			);
-			name = Frameworks;
+			name = "Support Files";
+			path = "../Target Support Files/BlueSocket";
 			sourceTree = "<group>";
 		};
 		7DB346D0F39D3F0E887471402A8071AB = {
@@ -128,28 +118,19 @@
 			children = (
 				93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */,
 				BC3CA7F9E30CC8F7E2DD044DD34432FC /* Frameworks */,
-				8D24FB1CD723113F89C7B22B2D69F8E8 /* Pods */,
+				05FF2FAF502886FEAD4FCF31453F2322 /* Pods */,
 				5633970AA283F7D8667DCDC72E12F7A9 /* Products */,
 				F83CBA1DA26EFECEC38A287847F73611 /* Targets Support Files */,
 			);
 			sourceTree = "<group>";
 		};
-		8D24FB1CD723113F89C7B22B2D69F8E8 /* Pods */ = {
+		ABBA672A17A3754E3EEE683E3A461BB3 /* BlueSocket */ = {
 			isa = PBXGroup;
 			children = (
-				B4D38F56B42B2016CF8CCB559A9F3DC4 /* BlueSocket */,
-				029FDE51BFDD299E3E4D7A335E39234D /* OpenCV */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
-		B4D38F56B42B2016CF8CCB559A9F3DC4 /* BlueSocket */ = {
-			isa = PBXGroup;
-			children = (
-				6562261560837C07A784DA6845BE54BC /* Socket.swift */,
-				17D4AF839A05D4112B67712FACD60634 /* SocketProtocols.swift */,
-				FD2098B3B93B0F8E0E06979EC34A9549 /* SocketUtils.swift */,
-				374CBF51E9BA15D1271388416D25BC3F /* Support Files */,
+				B9E3E52EDED6F843ADAC33A207A34C5C /* Socket.swift */,
+				10751A3F3870DCA759F0804326BE253F /* SocketProtocols.swift */,
+				BBFA77A5FABE74663EEC0DA35C518FD1 /* SocketUtils.swift */,
+				79725BD3D70A569F06C41F668553BE84 /* Support Files */,
 			);
 			name = BlueSocket;
 			path = BlueSocket;
@@ -365,7 +346,7 @@
 		};
 		2D31E8BFB3B9452B2BDB3ACD48DFEBB3 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9AABE7DF9BCB0B6B04014FD7588BC10A /* BlueSocket.xcconfig */;
+			baseConfigurationReference = 2FE922616F12CC8A7BEB6F5A18E02EF5 /* BlueSocket.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_IDENTITY = "";
@@ -546,7 +527,7 @@
 		};
 		C98F9B6C09A98E1E9343B762420213E3 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9AABE7DF9BCB0B6B04014FD7588BC10A /* BlueSocket.xcconfig */;
+			baseConfigurationReference = 2FE922616F12CC8A7BEB6F5A18E02EF5 /* BlueSocket.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_IDENTITY = "";

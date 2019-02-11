@@ -7,6 +7,6 @@ target 'BlueSocketNetworking' do
 
   # Pods for BlueSocketNetworking
   pod 'BlueSocket'
-  pod 'LegoCV'
+  #pod 'LegoCV'
   #pod 'OpenCV'
 end
