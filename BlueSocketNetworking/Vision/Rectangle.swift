@@ -82,6 +82,7 @@ extension ViewController {
         
         let context = CIContext(options: nil)
         if let cgImage = context.createCGImage(ciImage, from: ciImage.extent) {
+            self.cgImage = cgImage
             let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
             
             try handler.perform([request])
@@ -142,12 +143,12 @@ extension ViewController {
             var heights: [CGFloat] = []
             
             for result in results {
-                heights.append(result.bottomLeft.x - result.topLeft.x)
+                heights.append(result.bottomLeft.y - result.topLeft.y)
             }
             
             if let maxHeight = heights.max() {
                 results = results.filter { (observation) -> Bool in
-                    let height = observation.bottomLeft.x - observation.topLeft.x
+                    let height = observation.bottomLeft.y - observation.topLeft.y
                     if abs(height / maxHeight) > 0.8 {
                         return true
                     } else {
@@ -155,16 +156,47 @@ extension ViewController {
                     }
                 }
             }
-            
-          
-            /*results = results.filter({ (observation) -> Bool in
-                let width = observation.bottomRight.x - observation.bottomLeft.x
-                if width > 0.04 {
-                    return true
-                } else {
-                    return false
+//
+//            var cg: CGImage?
+//
+//            DispatchQueue.main.sync {
+//                let image = self.previewImageView.image
+//
+//                cg = image?.cgImage
+//            }
+            if let cg = self.cgImage {
+                for result in results {
+                    let height = result.bottomLeft.y - result.topLeft.y
+                    let width = result.bottomLeft.x - result.bottomRight.x
+                    if let cropped = cg.cropping(to: CGRect(x: result.bottomLeft.x.convertToPixels(pixelBufferSize: pixelBufferSize, axis: .x), y: result.bottomLeft.y.convertToPixels(pixelBufferSize: pixelBufferSize, axis: .y), width: width.convertToPixels(pixelBufferSize: pixelBufferSize, axis: .x), height: height.convertToPixels(pixelBufferSize: pixelBufferSize, axis: .y))) {
+                        
+                        if cropped.getLuminance() {
+                            // YAYAYAYAYAYAYAYAYAYAY
+                        } else {
+                            // BADBADBADBADBADBADBAD
+                            results.removeAll { (observation2) -> Bool in
+                                if observation2.uuid == result.uuid {
+                                    return true
+                                } else {
+                                    return false
+                                }
+                            }
+                        }
+                    }
                 }
-            })*/
+            } else {
+                print("Yo no haveo CGo")
+            }
+            
+            
+            /*results = results.filter({ (observation) -> Bool in
+             let width = observation.bottomRight.x - observation.bottomLeft.x
+             if width > 0.04 {
+             return true
+             } else {
+             return false
+             }
+             })*/
             
             // Sort remaining by confidence
             //results = results.sorted { (first, next) -> Bool in
@@ -267,4 +299,65 @@ extension ViewController {
         server?.setVisionData(data: RectangleData(degreesOfDifference: angle, date: dateString, height: CGFloat(distance)))
         
     }
+}
+
+extension CGImage {
+    func getLuminance() -> Bool {
+        let dataProvider = self.dataProvider?.data as! CFData
+        let pixels = CFDataGetBytePtr(dataProvider)
+        let length = CFDataGetLength(dataProvider)
+        var luminance = 0.0
+        var totalLuminace = 0.0
+        var i = 0
+        while i < length {
+            //let r = pixels?[i]
+            let g = pixels?[i + 1]
+            //let b = pixels?[i + 2]
+            
+            //luminance calculation gives more weight to r and b for human eyes
+            luminance += Double(g!)
+            totalLuminace += 1.0
+            
+            i += 4
+        }
+        
+        if (luminance / totalLuminace) > (UserDefaults.standard.double(forKey: DefaultsMap.redMin)) {
+            return true
+        } else {
+            return false
+        }
+    }/*
+    func isDarkImage() -> Bool {
+        
+        var isDark = false
+        
+        let imageData = CGImageGetDataProvider(self)?.data
+        let pixels = CFDataGetBytePtr(imageData)
+        
+        var darkPixels: Int = 0
+        
+        let length = CFDataGetLength(imageData)
+        let darkPixelThreshold = Int(Double(self.width) * Double(self.width) * 0.45)
+        
+        var i = 0
+        while i < length {
+            let r = pixels?[i]
+            let g = pixels?[i + 1]
+            let b = pixels?[i + 2]
+            
+            //luminance calculation gives more weight to r and b for human eyes
+            let luminance: Float = 0.299 * r + 0.587 * g + 0.114 * b
+            if luminance < 150 {
+                darkPixels += 1
+            }
+            i += 4
+        }
+        
+        if darkPixels >= darkPixelThreshold {
+            isDark = true
+        }
+        
+        return isDark
+    }*/
+    
 }

@@ -45,6 +45,8 @@ class ViewController: UIViewController {
     ///Confidence level
     var confidence: Float = 0.4
     
+    var cgImage: CGImage?
+    
     var lastRect1: VNRectangleObservation? = nil
     var lastRect2: VNRectangleObservation? = nil
     var rectangle1Tracker: VNSequenceRequestHandler? = nil
