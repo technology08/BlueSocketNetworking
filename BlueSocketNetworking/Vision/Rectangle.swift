@@ -156,52 +156,6 @@ extension ViewController {
                     }
                 }
             }
-//
-//            var cg: CGImage?
-//
-//            DispatchQueue.main.sync {
-//                let image = self.previewImageView.image
-//
-//                cg = image?.cgImage
-//            }
-            if let cg = self.cgImage {
-                for result in results {
-                    let height = result.bottomLeft.y - result.topLeft.y
-                    let width = result.bottomLeft.x - result.bottomRight.x
-                    if let cropped = cg.cropping(to: CGRect(x: result.bottomLeft.x.convertToPixels(pixelBufferSize: pixelBufferSize, axis: .x), y: result.bottomLeft.y.convertToPixels(pixelBufferSize: pixelBufferSize, axis: .y), width: width.convertToPixels(pixelBufferSize: pixelBufferSize, axis: .x), height: height.convertToPixels(pixelBufferSize: pixelBufferSize, axis: .y))) {
-                        
-                        if cropped.getLuminance() {
-                            // YAYAYAYAYAYAYAYAYAYAY
-                        } else {
-                            // BADBADBADBADBADBADBAD
-                            results.removeAll { (observation2) -> Bool in
-                                if observation2.uuid == result.uuid {
-                                    return true
-                                } else {
-                                    return false
-                                }
-                            }
-                        }
-                    }
-                }
-            } else {
-                print("Yo no haveo CGo")
-            }
-            
-            
-            /*results = results.filter({ (observation) -> Bool in
-             let width = observation.bottomRight.x - observation.bottomLeft.x
-             if width > 0.04 {
-             return true
-             } else {
-             return false
-             }
-             })*/
-            
-            // Sort remaining by confidence
-            //results = results.sorted { (first, next) -> Bool in
-            //    first.confidence > next.confidence
-            //}
             
             var leftResults: [VNRectangleObservation] = []
             var rightResults: [VNRectangleObservation] = []
@@ -222,24 +176,48 @@ extension ViewController {
                 first.bottomLeft.x < next.topLeft.x
             }
             
-            guard let leftOne = leftResults.first else { return nil }// Hardcoded for now, please change
-            var rightOne: VNRectangleObservation!
-            for right in rightResults {
-                if right.bottomLeft.x > leftOne.bottomRight.x {
-                    rightOne = right
-                    break
+            if let cg = self.cgImage {
+                for left in leftResults {
+                    // Crop it
+                    var right: VNRectangleObservation? {
+                        for right in rightResults {
+                            if right.bottomLeft.x > left.bottomRight.x {
+                                return right
+                            }
+                        }
+                        return nil
+                    }
+                    
+                    if right == nil { return nil }
+                    let grouped = groupResults(target1: left, target2: right!)
+                    if let cropped = cg.cropping(to: CGRect(x: grouped.minX.convertToPixels(pixelBufferSize: pixelBufferSize, axis: .x), y: grouped.minY.convertToPixels(pixelBufferSize: pixelBufferSize, axis: .y), width: grouped.width.convertToPixels(pixelBufferSize: pixelBufferSize, axis: .x), height: grouped.height.convertToPixels(pixelBufferSize: pixelBufferSize, axis: .y))) {
+                        
+                        // Check it
+                        if cropped.getLuminance() {
+                            // YAYAYAYAYAYAYAYAYAYAY
+                            if isIntersectionAbove(target1: left, target2: right!) {
+                                return [left, right!]
+                            }
+                        } else {
+                            // BADBADBADBADBADBADBAD
+                            results.removeAll { (observation2) -> Bool in
+                                if observation2.uuid == left.uuid || observation2.uuid == right!.uuid {
+                                    return true
+                                } else {
+                                    return false
+                                }
+                            }
+                        }
+                        
+                        
+                    } else {
+                        print("Yo no haveo CGo")
+                    }
                 }
             }
-            
-            guard rightOne != nil else { return nil }
-            if isIntersectionAbove(target1: leftOne, target2: rightOne) {
-                return [leftOne, rightOne]
-            }
-            
             return nil
         }
     }
-    
     
     /**
      Processes data and updates `RectangleData` object in `VisionServer`.
@@ -327,37 +305,37 @@ extension CGImage {
             return false
         }
     }/*
-    func isDarkImage() -> Bool {
-        
-        var isDark = false
-        
-        let imageData = CGImageGetDataProvider(self)?.data
-        let pixels = CFDataGetBytePtr(imageData)
-        
-        var darkPixels: Int = 0
-        
-        let length = CFDataGetLength(imageData)
-        let darkPixelThreshold = Int(Double(self.width) * Double(self.width) * 0.45)
-        
-        var i = 0
-        while i < length {
-            let r = pixels?[i]
-            let g = pixels?[i + 1]
-            let b = pixels?[i + 2]
-            
-            //luminance calculation gives more weight to r and b for human eyes
-            let luminance: Float = 0.299 * r + 0.587 * g + 0.114 * b
-            if luminance < 150 {
-                darkPixels += 1
-            }
-            i += 4
-        }
-        
-        if darkPixels >= darkPixelThreshold {
-            isDark = true
-        }
-        
-        return isDark
-    }*/
+     func isDarkImage() -> Bool {
+     
+     var isDark = false
+     
+     let imageData = CGImageGetDataProvider(self)?.data
+     let pixels = CFDataGetBytePtr(imageData)
+     
+     var darkPixels: Int = 0
+     
+     let length = CFDataGetLength(imageData)
+     let darkPixelThreshold = Int(Double(self.width) * Double(self.width) * 0.45)
+     
+     var i = 0
+     while i < length {
+     let r = pixels?[i]
+     let g = pixels?[i + 1]
+     let b = pixels?[i + 2]
+     
+     //luminance calculation gives more weight to r and b for human eyes
+     let luminance: Float = 0.299 * r + 0.587 * g + 0.114 * b
+     if luminance < 150 {
+     darkPixels += 1
+     }
+     i += 4
+     }
+     
+     if darkPixels >= darkPixelThreshold {
+     isDark = true
+     }
+     
+     return isDark
+     }*/
     
 }

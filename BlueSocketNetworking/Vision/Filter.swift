@@ -57,7 +57,20 @@ extension CIImage {
         }
         """
         
-        guard let kernel = CIColorKernel(source: dansKernelString) else { return nil }
+        let onlyGreen =
+        """
+         kernel vec4 thresholdFilter(__sample textureColor, float redMin, float redMax, float greenMin, float greenMax, float blueMin, float blueMax) {
+                if (textureColor.g > greenMin) {
+
+                    textureColor.rgb = vec3(textureColor.g * 1.5, textureColor.g * 1.5, textureColor.g * 1.5);
+                }
+            return textureColor;
+        }
+        """
+        let url = Bundle.main.url(forResource: "default", withExtension: "metallib")!
+        let data = try! Data(contentsOf: url)
+        let kernel = try! CIColorKernel(functionName: "thresholdFilter", fromMetalLibraryData: data)
+        //guard let kernel = CIColorKernel(source: onlyGreen) else { return nil }
         let filtered = kernel.apply(extent: self.extent, arguments: [self, redMin, redMax, greenMin, greenMax, blueMin, blueMax])
         return filtered
         
@@ -78,8 +91,11 @@ extension CMSampleBuffer {
         
         let image = CIImage(cvPixelBuffer: buffer)
         if filtered {
-            let filteredImage = image.colorFilter(redMin: redMin, redMax: redMax, greenMin: greenMin, greenMax: greenMax, blueMin: blueMin, blueMax: blueMax)!
-            return (filteredImage, pixelBufferSize)
+            /*let filteredImage = image.colorFilter(redMin: redMin, redMax: redMax, greenMin: greenMin, greenMax: greenMax, blueMin: blueMin, blueMax: blueMax)!
+            return (filteredImage, pixelBufferSize)*/
+            let filter = MetalKernelFilter(inputImage: image, inputGreen: greenMin)
+            let image = filter.outputImage!
+            return (image, pixelBufferSize)
         } else {
             return (image, pixelBufferSize)
         }

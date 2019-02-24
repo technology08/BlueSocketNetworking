@@ -164,19 +164,13 @@ class EchoServer {
                             return
                         }
                         print("Server received from connection at \(socket.remoteHostname):\(socket.remotePort): \(request) ")
-                        print(request + "this is the end")
                         if request.starts(with: "VISION") {
                             //self.visionData.randomize()
-                            print("POR FAVOR MANTANGESE ALJEADO DE LAS PUERTAS")
                             DispatchQueue.main.async {
                                 let string = self.getVisionData()!.getPipeString()
                                 print(string)
                                 do {
                                     try socket.write(from: string)
-                                    print("WE ARE THE CHAMPIONS MY FRIENDS")
-                                    print("AND WE'LL")
-                                    print("KEEP ON FIGHTING")
-                                    print("TO THE END")
                                 } catch {
                                     print(error)
                                 }

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0002CD8F2221D6E30026BF2F /* KernelFilter.metal in Sources */ = {isa = PBXBuildFile; fileRef = 0002CD8E2221D6E30026BF2F /* KernelFilter.metal */; };
+		0002CD912222FC4F0026BF2F /* CIMetalFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0002CD902222FC4F0026BF2F /* CIMetalFilter.swift */; };
 		0008D29821DFBB69009780EF /* SteamworksTargetDetector.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 0008D29721DFBB68009780EF /* SteamworksTargetDetector.mlmodel */; };
 		0008D29A21DFBBB6009780EF /* CoreML.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0008D29921DFBBB6009780EF /* CoreML.swift */; };
 		000D994721E15274007D71C7 /* DataCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000D994621E15274007D71C7 /* DataCaptureViewController.swift */; };
@@ -37,6 +39,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0002CD8E2221D6E30026BF2F /* KernelFilter.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = KernelFilter.metal; sourceTree = "<group>"; };
+		0002CD902222FC4F0026BF2F /* CIMetalFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CIMetalFilter.swift; sourceTree = "<group>"; };
 		0008D29721DFBB68009780EF /* SteamworksTargetDetector.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = SteamworksTargetDetector.mlmodel; sourceTree = "<group>"; };
 		0008D29921DFBBB6009780EF /* CoreML.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreML.swift; sourceTree = "<group>"; };
 		000D994621E15274007D71C7 /* DataCaptureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataCaptureViewController.swift; sourceTree = "<group>"; };
@@ -140,6 +144,8 @@
 				0008D29921DFBBB6009780EF /* CoreML.swift */,
 				00C7858121F65B20008AEF92 /* Rectangle.swift */,
 				007D5F1E21F64FFC0097344E /* 2019-Rectangle.swift */,
+				0002CD8E2221D6E30026BF2F /* KernelFilter.metal */,
+				0002CD902222FC4F0026BF2F /* CIMetalFilter.swift */,
 				007D5F2321F650820097344E /* ML Models */,
 			);
 			path = Vision;
@@ -330,8 +336,10 @@
 				0008D29821DFBB69009780EF /* SteamworksTargetDetector.mlmodel in Sources */,
 				00C7858221F65B20008AEF92 /* Rectangle.swift in Sources */,
 				000D994921E153D0007D71C7 /* DataCaptureCamera.swift in Sources */,
+				0002CD8F2221D6E30026BF2F /* KernelFilter.metal in Sources */,
 				00183B0221E29421003D3D37 /* PercentView.swift in Sources */,
 				0008D29A21DFBBB6009780EF /* CoreML.swift in Sources */,
+				0002CD912222FC4F0026BF2F /* CIMetalFilter.swift in Sources */,
 				007D5F1F21F64FFC0097344E /* 2019-Rectangle.swift in Sources */,
 				003D0FFD220119FC002E7859 /* 2019-Vision-Targets.mlmodel in Sources */,
 				008C919D2167EA3E002DEF4D /* SettingsViewController.swift in Sources */,
@@ -499,6 +507,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MTLLINKER_FLAGS = "-cikernel";
+				MTL_COMPILER_FLAGS = "-fcikernel";
 				PRODUCT_BUNDLE_IDENTIFIER = com.CE.BlueSocketNetworking;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
@@ -520,6 +530,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MTLLINKER_FLAGS = "-cikernel";
+				MTL_COMPILER_FLAGS = "-fcikernel";
 				PRODUCT_BUNDLE_IDENTIFIER = com.CE.BlueSocketNetworking;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
