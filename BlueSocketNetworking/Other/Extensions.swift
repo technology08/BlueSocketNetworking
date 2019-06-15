@@ -50,3 +50,5 @@ func lock(obj: AnyObject, blk:() -> ()) {
     blk()
     objc_sync_exit(obj)
 }
+
+// GCD sync not async

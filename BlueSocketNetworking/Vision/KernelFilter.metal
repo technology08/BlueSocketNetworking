@@ -12,17 +12,18 @@ using namespace metal;
 
 extern "C" { namespace coreimage {
     
-    /*float4 myColor(sample_t s) {
-        
-        return s.grba;
-    }*/
-    
-    float4 thresholdFilter(sample_t textureColor/*, float redMin, float redMax */, float greenMin/*, float greenMax, float blueMin, float blueMax*/) {
+    float4 thresholdFilter(sample_t textureColor/*, float redMin, float redMax */, float greenMin, float greenMax/*, float blueMin, float blueMax*/) {
 
         if (textureColor.g > greenMin) {
             
             //textureColor.rgba = float4(textureColor.g * 1.5, textureColor.g * 1.5, textureColor.g * 1.5, textureColor.a);
-            textureColor.rgba = float4(1.0, 1.0, 1.0, textureColor.a);
+            if ((textureColor.g + textureColor.r + textureColor.g / 3) > greenMax) {
+                textureColor.rgba = float4(1.0, 1.0, 1.0, 1.0);
+            } else {
+                textureColor.rgba = float4(0.0, 0.0, 0.0, 1.0);
+            }
+        } else {
+            textureColor.rgba = float4(0.0, 0.0, 0.0, 1.0);
         }
         return textureColor.rgba;
     }

@@ -113,14 +113,15 @@ extension ViewController {
     }
     
     func trackRectHandler(results: [VNRectangleObservation]) {
-        if let results = detectionHandler(results: results) {
+        //if let results = detectionHandler(results: results) {
+            
             self.lastRect1 = results[0]
             self.lastRect2 = results[1]
             
             let observation = groupResults(target1: results[0], target2: results[1])
             
             self.processData(observation: observation)
-        }
+        //}
     }
     
     func detectionHandler(results: [VNRectangleObservation]) -> [VNRectangleObservation]? {
@@ -190,29 +191,32 @@ extension ViewController {
                     
                     if right == nil { return nil }
                     let grouped = groupResults(target1: left, target2: right!)
-                    if let cropped = cg.cropping(to: CGRect(x: grouped.minX.convertToPixels(pixelBufferSize: pixelBufferSize, axis: .x), y: grouped.minY.convertToPixels(pixelBufferSize: pixelBufferSize, axis: .y), width: grouped.width.convertToPixels(pixelBufferSize: pixelBufferSize, axis: .x), height: grouped.height.convertToPixels(pixelBufferSize: pixelBufferSize, axis: .y))) {
-                        
-                        // Check it
-                        if cropped.getLuminance() {
-                            // YAYAYAYAYAYAYAYAYAYAY
-                            if isIntersectionAbove(target1: left, target2: right!) {
-                                return [left, right!]
-                            }
-                        } else {
-                            // BADBADBADBADBADBADBAD
-                            results.removeAll { (observation2) -> Bool in
-                                if observation2.uuid == left.uuid || observation2.uuid == right!.uuid {
-                                    return true
-                                } else {
-                                    return false
+                    if ((grouped.width * grouped.height) / ((left.bottomLeft.y - left.topLeft.y) * (left.bottomRight.x - left.bottomLeft.x))) < 3 {
+                        if let cropped = cg.cropping(to: CGRect(x: grouped.minX.convertToPixels(pixelBufferSize: pixelBufferSize, axis: .x), y: grouped.minY.convertToPixels(pixelBufferSize: pixelBufferSize, axis: .y), width: grouped.width.convertToPixels(pixelBufferSize: pixelBufferSize, axis: .x), height: grouped.height.convertToPixels(pixelBufferSize: pixelBufferSize, axis: .y))) {
+                            
+                            // Check it
+                            if cropped.getLuminance() {
+                                // YAYAYAYAYAYAYAYAYAYAY
+                                if isIntersectionAbove(target1: left, target2: right!) {
+                                    return [left, right!]
+                                }
+                            } else {
+                                // BADBADBADBADBADBADBAD
+                                results.removeAll { (observation2) -> Bool in
+                                    if observation2.uuid == left.uuid || observation2.uuid == right!.uuid {
+                                        return true
+                                    } else {
+                                        return false
+                                    }
                                 }
                             }
+                            
+                            
+                        } else {
+                            print("Yo no haveo CGo")
                         }
-                        
-                        
-                    } else {
-                        print("Yo no haveo CGo")
                     }
+                    
                 }
             }
             return nil
@@ -293,7 +297,8 @@ extension CGImage {
             //let b = pixels?[i + 2]
             
             //luminance calculation gives more weight to r and b for human eyes
-            luminance += Double(g!)
+            
+            luminance += Double(g! / 255)
             totalLuminace += 1.0
             
             i += 4

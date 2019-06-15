@@ -93,7 +93,7 @@ extension CMSampleBuffer {
         if filtered {
             /*let filteredImage = image.colorFilter(redMin: redMin, redMax: redMax, greenMin: greenMin, greenMax: greenMax, blueMin: blueMin, blueMax: blueMax)!
             return (filteredImage, pixelBufferSize)*/
-            let filter = MetalKernelFilter(inputImage: image, inputGreen: greenMin)
+            let filter = MetalKernelFilter(inputImage: image, inputGreen: greenMin, inputBrightness: greenMax)
             let image = filter.outputImage!
             return (image, pixelBufferSize)
         } else {

@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Bucket
+   uuid = "581BDCFC-A821-4EB3-AA47-9AC9C53AE132"
    type = "0"
    version = "2.0">
    <Breakpoints>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
+            uuid = "1D232EB4-ADD6-459B-87E6-0AE53A8607FC"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
@@ -22,6 +24,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
+            uuid = "456F54AD-F493-4C76-A1D8-AE5AAE78F65E"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
@@ -38,6 +41,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
+            uuid = "6986D932-C11B-4C53-A68C-648684462229"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
@@ -54,6 +58,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
+            uuid = "9385E55D-4B2E-4EB5-AA24-4CDB691949D6"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
@@ -70,33 +75,35 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
+            uuid = "0421987A-B551-4A4D-ABBE-77A1398DEA5C"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "BlueSocketNetworking/Vision/Filter.swift"
-            timestampString = "572719886.632763"
+            filePath = "BlueSocketNetworking/Vision/KernelFilter.metal"
+            timestampString = "572837369.9071209"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "98"
-            endingLineNumber = "98"
-            landmarkName = "getFilteredImage(redMin:redMax:greenMin:greenMax:blueMin:blueMax:filtered:)"
-            landmarkType = "7">
+            startingLineNumber = "22"
+            endingLineNumber = "22"
+            landmarkName = "thresholdFilter(sample_t textureColor/*, float redMin, float redMax */, float greenMin, float greenMax/*, float blueMin, float blueMax*/)"
+            landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
+            uuid = "40B5F7B8-C2B9-4DAA-9C24-6ED413802D36"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "BlueSocketNetworking/Vision/KernelFilter.metal"
-            timestampString = "572719886.632839"
+            filePath = "BlueSocketNetworking/Vision/Rectangle.swift"
+            timestampString = "573240418.316303"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "22"
-            endingLineNumber = "22"
-            landmarkName = "thresholdFilter(sample_t textureColor/*, float redMin, float redMax */, float greenMin/*, float greenMax, float blueMin, float blueMax*/)"
-            landmarkType = "9">
+            startingLineNumber = "307"
+            endingLineNumber = "307"
+            landmarkName = "unknown"
+            landmarkType = "0">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

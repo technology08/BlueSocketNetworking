@@ -11,8 +11,8 @@ import CoreImage
 class MetalKernelFilter: CIFilter {
     private var inputImage: CIImage?
     private var inputGreen: Float?
-    
-    private var customKernel: CIColorKernel? = nil
+    private var inputBrightness: Float?
+    private var customKernel: CIColorKernel?
     
     fileprivate func initializeKernel() {
         if customKernel == nil {
@@ -33,12 +33,12 @@ class MetalKernelFilter: CIFilter {
         initializeKernel()
     }
     
-    convenience init(inputImage: CIImage, inputGreen: Float? = 0.5) {
+    convenience init(inputImage: CIImage, inputGreen: Float? = 0.5, inputBrightness: Float? = 0.5) {
         
         self.init()
         self.inputImage = inputImage
         self.inputGreen = inputGreen
-                
+        self.inputBrightness = inputBrightness
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -47,7 +47,7 @@ class MetalKernelFilter: CIFilter {
     
     override var outputImage: CIImage? {
         guard let inputImage = inputImage else { return nil }
-        return customKernel?.apply(extent: inputImage.extent, arguments: [inputImage, inputGreen ?? 0.5])
+        return customKernel?.apply(extent: inputImage.extent, arguments: [inputImage, inputGreen ?? 0.5, inputBrightness ?? 0.5])
     }
     
 }
